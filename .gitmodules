@@ -1,0 +1,3 @@
+[submodule "srcs/libftmulti"]
+	path = srcs/libftmulti
+	url = https://github.com/oevtushe/libftmulti.git
