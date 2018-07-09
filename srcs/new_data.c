@@ -14,10 +14,8 @@
 
 t_lmdata	*new_data(int adj_ds)
 {
-	int			i;
 	t_lmdata	*data;
 
-	i = 0;
 	data = (t_lmdata*)ft_memalloc(sizeof(t_lmdata));
 	data->adj = (t_list **)ft_memalloc(sizeof(t_list *) * adj_ds);
 	data->adj_as = adj_ds;

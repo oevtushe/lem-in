@@ -21,10 +21,8 @@
 
 void	ft_realloc(void **mem, size_t old_size, size_t new_size)
 {
-	size_t	i;
 	void	*new_mem;
 
-	i = 0;
 	if (old_size < new_size)
 	{
 		new_mem = ft_memalloc(new_size);

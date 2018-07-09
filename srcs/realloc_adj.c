@@ -14,9 +14,11 @@
 
 void		realloc_adj(t_lmdata *data)
 {
-	size_t len;
+	size_t old_len;
+	size_t new_len;
 
-	len = sizeof(void *) * data->adj_as;
-	data->adj_as = len + 10;
-	ft_realloc((void**)&data->adj, len, data->adj_as);
+	old_len = data->adj_as * sizeof(void *);
+	data->adj_as += 10;
+	new_len = data->adj_as * sizeof(void *);
+	ft_realloc((void**)&data->adj, old_len, new_len);
 }

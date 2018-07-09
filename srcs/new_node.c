@@ -20,6 +20,5 @@ t_node	*new_node(char *line, int x, int y)
 	node->name = ft_strdup(line);
 	node->x = x;
 	node->y = y;
-	node->d = -1;
 	return (node);
 }

@@ -19,7 +19,7 @@ void	*ft_lstdequeue(t_list **root)
 
 	fst = *root;
 	*root = (*root)->next;
-	content = fst-content;
+	content = fst->content;
 	ft_memdel((void **)&fst);
 	return (content);
 }

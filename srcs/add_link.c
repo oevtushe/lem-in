@@ -36,13 +36,13 @@ int		add_link(t_lmdata *data, char *fst, char *scd)
 		if (!ft_lstcontains(data->adj[i], data->adj[j], check))
 		{
 			ft_printf("Add new node to %s\n", ((t_node*)data->adj[i]->content)->name);
-			clone = clone_room(data->adj[j]);
+			clone = clone_node(data->adj[j]);
 			ft_lstappend(&data->adj[i], clone);
 		}
 		if (!ft_lstcontains(data->adj[j], data->adj[i], check))
 		{
 			ft_printf("Add new node to %s\n", ((t_node*)data->adj[j]->content)->name);
-			clone = clone_room(data->adj[i]);
+			clone = clone_node(data->adj[i]);
 			ft_lstappend(&data->adj[j], clone);
 		}
 		res = 1;

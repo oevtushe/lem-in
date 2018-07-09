@@ -31,6 +31,7 @@ typedef	struct	s_node
 	char	*name;
 	int		p;
 	int		d;
+	int		visited;
 }				t_node;
 
 typedef struct	s_pair
@@ -39,12 +40,12 @@ typedef struct	s_pair
 	void *scd;
 }				t_pair;
 
-t_list		*ft_lstdequeue(t_list **root);
+void		*ft_lstdequeue(t_list **root);
 t_pair		*ft_new_pair(void *fst, void *scd);
 int			ft_lstcontains(t_list *lst, t_list *sn, int (*check)(t_list *cn, t_list *sn));
 int			ft_arrcontains(void **arr, int size, void *data, int (*check)(void *elem, void *data));
 int			add_link(t_lmdata *data, char *fst, char *scd);
-t_list		*clone_room(t_list *room);
+t_list		*clone_node(t_list *room);
 int			get_node_idx(t_lmdata *data, char *name);
 void		check_adj(t_lmdata *data);
 void		realloc_adj(t_lmdata *data);

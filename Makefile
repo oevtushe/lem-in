@@ -33,13 +33,13 @@ LN_SRCF				:= main.c				\
 					   realloc_adj.c		\
 					   get_node_idx.c		\
 					   new_room_node.c		\
-					   clone_room.c			\
 					   add_link.c			\
 					   ft_lstcontains.c		\
 					   ft_lstcontains.c		\
 					   ft_arrcontains.c		\
 					   ft_new_pair.c		\
 					   ft_lstdequeue.c		\
+					   clone_node.c			\
 					   new_data.c
 LN_DEPF				:= lem_in.h
 

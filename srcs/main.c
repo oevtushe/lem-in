@@ -132,7 +132,7 @@ int		read_ants(int *ants)
 
 	st = 0;
 	line = NULL;
-	if (get_next_line(1, &line))
+	if (get_next_line(0, &line))
 	{
 		if (ft_isvldint(line) && line[0] != '-')
 		{
@@ -150,25 +150,61 @@ void	print_links(t_list *node)
 	t_node *room;
 
 	room = (t_node*)node->content;
-	ft_printf("-> %s\n", room->name);
+	ft_printf("name -> %s\n", room->name);
+	ft_printf("d -> %d\n", room->d);
+	ft_printf("p -> %d\n", room->p);
 }
 
 void	bfs(t_lmdata *data, t_pair *extra)
 {
-	t_list *queue;
-	t_node *u;
+	t_list	*queue;
+	t_node	*u;
+	t_list	*v;
+	int		idx;
 
 	queue = NULL;
-	queue = extra->fst;
+	queue = clone_node(extra->fst);
 	((t_node *)queue->content)->d = 0;
 	while (queue)
 	{
-		u = ft_lstdequeue()
+		u = ft_lstdequeue(&queue);
+		idx = get_node_idx(data, u->name);
+		v = data->adj[idx]->next;
+		while (v)
+		{
+			if (!((t_node*)v->content)->visited)
+			{
+				((t_node*)v->content)->d = u->d + 1;
+				((t_node*)v->content)->p = idx;
+				ft_lstappend(&queue, clone_node(v));
+				((t_node*)v->content)->visited = 1;
+			}
+			v = v->next;
+		}
+		u->visited = 1;
 	}
+}
+
+void	print_path(t_lmdata *data, t_pair *extra)
+{
+	t_node *cur;
+	t_node *start;
+	t_node *end;
+
+	start = (t_node*)((t_list*)extra->fst)->content; 
+	end = (t_node*)((t_list*)extra->scd)->content; 
+	cur = end;
+	while (cur->name != start->name)
+	{
+		ft_printf("%s->", cur->name);
+		cur = (t_node *)data->adj[cur->p]->content;
+	}
+	ft_printf("%s\n", cur->name);
 }
 
 int		main(void)
 {
+	int			data_type;
 	int			cmd_mode;
 	char 		*line;
 	size_t		len;
@@ -178,17 +214,12 @@ int		main(void)
 
 	line = NULL;
 	cmd_mode = 0;
+	data_type = 0;
 	len = 0;
 	data = new_data(1);
 	extra = (t_pair *)ft_memalloc(sizeof(t_pair));
-	if (!read_ants(&data->ants))
-	{
-		pr = 0;
-		ft_printf("ERROR\n");
-	}
-	else
-		pr = 1;
-	while (pr && get_next_line(1, &line))
+	pr = read_ants(&data->ants);
+	while (pr && get_next_line(0, &line))
 	{
 		len = ft_strlen(line);
 		if (len > 1 && line[0] == '#' && line[1] == '#')
@@ -198,16 +229,23 @@ int		main(void)
 			pr = 1;
 			ft_printf("It's a comment !\n");
 		}
-		else if ((pr = parse_room(line, data, cmd_mode, extra)))
-			cmd_mode = 0;
-		else
-			pr = parse_link(line, data);
-		if (!pr || cmd_mode < 0)
+		else if (data_type == 0 && (pr = parse_room(line, data, cmd_mode, extra)))
 		{
-			ft_printf("ERROR\n");
-			pr = 0;
+			cmd_mode = 0;
 		}
+		else
+		{
+			data_type = 1;
+			pr = parse_link(line, data);
+		}
+		if (!pr || cmd_mode < 0)
+			pr = 0;
 		ft_strdel(&line);
+	}
+	if (!pr || !extra->fst || !extra->scd)
+	{
+		ft_printf("ERROR\n");
+		return (0);
 	}
 	pr = 0;
 	ft_printf("Result data:\n");
@@ -215,10 +253,14 @@ int		main(void)
 	ft_printf("%s\n", ((t_node*)((t_list*)extra->fst)->content)->name);
 	ft_printf("Finish:\n");
 	ft_printf("%s\n", ((t_node*)((t_list*)extra->scd)->content)->name);
+	bfs(data, extra);
+#ifdef DEBUG
 	while (pr < data->adj_cs)
 	{
 		ft_lstiter(data->adj[pr++], print_links);
 		ft_putchar('\n');
 	}
+#endif
+	print_path(data, extra);
 	return (0);
 }

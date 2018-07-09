@@ -12,12 +12,20 @@
 
 #include "lem_in.h"
 
-t_list	*clone_room(t_list *room)
+/*
+** Creates new node with the same content,
+** as in passed one.
+*/
+
+t_list	*clone_node(t_list *room)
 {
 	t_list *clone;
 	t_node *cr;
 
 	cr = (t_node*)room->content;
-	clone = new_room_node(cr->name, cr->x, cr->y);
+	//clone = new_room_node(cr->name, cr->x, cr->y);
+	clone = ft_lstnew(NULL, 0);
+	clone->content = cr;
+	clone->content_size = sizeof(t_node);
 	return (clone);
 }
