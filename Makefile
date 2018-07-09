@@ -6,7 +6,7 @@
 #    By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/12 10:30:58 by oevtushe          #+#    #+#              #
-#    Updated: 2018/07/07 19:58:57 by oevtushe         ###   ########.fr        #
+#    Updated: 2018/07/09 16:20:30 by oevtushe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,7 @@ LN_DEPS				:= $(LN_DEPF:%=$(LN_DEPS_DIR)/%)
 LN_OBJS				:= $(LN_SRCF:%.c=$(LN_OBJS_DIR)/%.o)
 
 CC					:= gcc
-CFLAGS				:= -Wall -Werror -Wextra -g
+CFLAGS				:= $(DEBUG) -Wall -Werror -Wextra -g
 RM					:= rm -rf
 MFLAGS				:= --no-print-directory -C
 IFLAGS				:= -I$(LN_DEPS_DIR) -I$(FT_DEPS_DIR) -I$(GNL_DIR) -I$(FTP_DEPS_DIR)
