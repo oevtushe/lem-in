@@ -185,7 +185,9 @@ void	print_links(t_list *node)
 	ft_printf("p -> %d\n", room->p);
 }
 
-void	bfs(t_lmdata *data, t_pair *extra)
+
+
+void	bfs(t_lmdata *data, t_list *start)
 {
 	t_list	*queue;
 	t_node	*u;
@@ -193,7 +195,7 @@ void	bfs(t_lmdata *data, t_pair *extra)
 	int		idx;
 
 	queue = NULL;
-	queue = clone_node(extra->fst);
+	queue = clone_node(start);
 	((t_node *)queue->content)->d = 0;
 	while (queue)
 	{
@@ -215,34 +217,69 @@ void	bfs(t_lmdata *data, t_pair *extra)
 	}
 }
 
-void	print_path_helper(t_lmdata *data, t_pair *extra, int idx)
+void	wash_up(t_list *elem)
 {
-	if (((t_node*)data->adj[idx]->content)->name == ((t_node*)((t_list*)extra->fst)->content)->name)
-	{
-		ft_printf("%s", ((t_node*)data->adj[idx]->content)->name);
-		return ;
-	}
-	else
-		print_path_helper(data, extra, ((t_node*)data->adj[idx]->content)->p);
-	ft_printf("->%s", ((t_node*)data->adj[idx]->content)->name);
+	t_node *node;
+
+	node = (t_node*)elem->content;
+	node->d = 0;
+	node->p = 0;
+	node->visited = 0;
 }
 
-void	print_path(t_lmdata *data, t_pair *extra)
+void	wash_up_map(t_lmdata *data)
 {
-	t_node	*cur;
-	t_node	*start;
-	t_node	*end;
+	int	i;
 
-	start = (t_node*)((t_list*)extra->fst)->content; 
-	end = (t_node*)((t_list*)extra->scd)->content; 
-	cur = end;
-	if (!end->d)
+	i = 0;
+	while (i < data->adj_cs)
+		ft_lstiter(data->adj[i++], wash_up);
+}
+
+void	print(t_list *node)
+{
+	ft_printf("%d\n", *(int*)node->content);
+}
+
+void	decode_paths(t_list *paths)
+{
+	t_list *path;
+
+	while (paths)
 	{
-		ft_printf("There is no path between start and end !\nERROR\n");
-		return ;
+		path = (t_list *)paths->content;
+		ft_printf("\nPath:\n");
+		ft_lstiter(path, print);
+		paths = paths->next;
 	}
-	print_path_helper(data, extra, get_node_idx(data, ((t_node*)((t_list*)extra->scd)->content)->name));
-	ft_putchar('\n');
+}
+
+void	multipaths(t_lmdata *data, t_pair *extra)
+{
+	t_list *start;
+	t_pair *extra_tmp;
+	t_list *paths;
+	t_path *path;
+	t_list *tmp;
+
+	paths = NULL;
+	path = NULL;
+	extra_tmp = ft_memalloc(sizeof(t_pair));
+	extra_tmp->scd = extra->scd;
+	start = ((t_list*)extra->fst)->next;
+	while (start)
+	{
+		bfs(data, start);
+		extra_tmp->fst = start;
+		print_path(data, extra_tmp);
+		save_path(data, extra_tmp, &path);
+		wash_up_map(data);
+		start = start->next;
+		tmp = ft_lstnew(path, sizeof(t_list));
+		ft_lstadd(&paths, tmp);
+		ft_memdel((void**)&path);
+	}
+	decode_paths(paths);
 }
 
 int		main(void)
@@ -301,7 +338,7 @@ int		main(void)
 	ft_printf("Finish:\n");
 	ft_printf("%s\n", ((t_node*)((t_list*)extra->scd)->content)->name);
 #endif
-	bfs(data, extra);
+	multipaths(data, extra);
 #ifdef DEBUG
 	while (pr < data->adj_cs)
 	{
@@ -309,6 +346,5 @@ int		main(void)
 		ft_putchar('\n');
 	}
 #endif
-	print_path(data, extra);
 	return (0);
 }

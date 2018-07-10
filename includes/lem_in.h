@@ -34,6 +34,12 @@ typedef	struct	s_node
 	int		visited;
 }				t_node;
 
+typedef struct	s_path
+{
+	t_list *black_list;
+	t_list *path;
+}				t_path;
+
 typedef struct	s_pair
 {
 	void *fst;
@@ -57,6 +63,8 @@ t_node		*new_node(char *line, int x, int y);
 void		del_node(void *content, size_t content_size);
 t_list		*new_room_node(char *name, int x, int y);
 void		free_node(t_node **node);
+void		print_path(t_lmdata *data, t_pair *extra);
+void		save_path(t_lmdata *data, t_pair *extra, t_list **ts);
 
 /*
 ** For tests

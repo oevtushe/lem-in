@@ -40,6 +40,8 @@ LN_SRCF				:= main.c				\
 					   ft_new_pair.c		\
 					   ft_lstdequeue.c		\
 					   clone_node.c			\
+					   print_path.c			\
+					   save_path.c			\
 					   new_data.c
 LN_DEPF				:= lem_in.h
 
