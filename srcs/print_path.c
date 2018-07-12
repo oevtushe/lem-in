@@ -1,27 +1,39 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print_path.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/07/10 20:48:15 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/07/12 13:29:26 by oevtushe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lem_in.h"
 
-static void	print_path_helper(t_lmdata *data, t_pair *extra, int idx)
+static void	print_path_helper(t_lmdata *data, int idx)
 {
-	if (((t_node*)data->adj[idx]->content)->name == ((t_node*)((t_list*)extra->fst)->content)->name)
+	if (((t_node*)data->adj[idx]->content)->name == ((t_node*)((t_list*)data->extra->fst)->content)->name)
 	{
 		ft_printf("%s", ((t_node*)data->adj[idx]->content)->name);
 		return ;
 	}
 	else
-		print_path_helper(data, extra, ((t_node*)data->adj[idx]->content)->p);
+		print_path_helper(data, ((t_node*)data->adj[idx]->content)->p);
 	ft_printf("->%s", ((t_node*)data->adj[idx]->content)->name);
 }
 
-void		print_path(t_lmdata *data, t_pair *extra)
+void		print_path(t_lmdata *data)
 {
 	t_node	*end;
 
-	end = (t_node*)((t_list*)extra->scd)->content; 
+	end = (t_node*)((t_list*)data->extra->scd)->content; 
 	if (!end->d)
 	{
 		ft_printf("There is no path between start and end !\nERROR\n");
 		return ;
 	}
-	print_path_helper(data, extra, get_node_idx(data, ((t_node*)((t_list*)extra->scd)->content)->name));
+	print_path_helper(data, get_node_idx(data, ((t_node*)((t_list*)data->extra->scd)->content)->name));
 	ft_putchar('\n');
 }

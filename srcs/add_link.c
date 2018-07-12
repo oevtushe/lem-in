@@ -6,19 +6,19 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/05 09:39:57 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/09 16:57:20 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/10 15:38:48 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-int		check(t_list *n, t_list *sn)
+static int		check(t_list *n, void *sn)
 {
 	t_node *n1;
 	t_node *n2;
 
 	n1 = (t_node*)n->content;
-	n2 = (t_node*)sn->content;
+	n2 = (t_node*)((t_list*)sn)->content;
 	return (ft_strequ(n1->name, n2->name));
 }
 

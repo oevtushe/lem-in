@@ -6,7 +6,7 @@
 #    By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/12 10:30:58 by oevtushe          #+#    #+#              #
-#    Updated: 2018/07/09 16:20:30 by oevtushe         ###   ########.fr        #
+#    Updated: 2018/07/12 15:08:10 by oevtushe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,11 @@ LN_SRCF				:= main.c				\
 					   clone_node.c			\
 					   print_path.c			\
 					   save_path.c			\
+					   bfs.c				\
+					   wash_up_map.c		\
+					   parsers.c			\
+					   add_to_blacklist.c	\
+					   ft_lstpeeklast.c		\
 					   new_data.c
 LN_DEPF				:= lem_in.h
 

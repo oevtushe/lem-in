@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstcontains.c                                   :+:      :+:    :+:   */
+/*   new_source.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/05 10:48:59 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/10 15:28:44 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/07/12 12:19:02 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/07/12 12:21:27 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-int		ft_lstcontains(t_list *lst, void *sn, int (*check)(t_list *cn, void *sn))
+t_source	*new_source(t_list *s, t_list *black_list)
 {
-	while (lst)
+	t_source *source;
+
+	source = NULL;
+	if (s)
 	{
-		if (check(lst, sn))
-			return (1);
-		lst = lst->next;
+		source->nodes = s;
+		source->black_list = black_list;
 	}
-	return (0);
+	return (source);
 }

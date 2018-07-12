@@ -1,24 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstcontains.c                                   :+:      :+:    :+:   */
+/*   ft_lstpeeklast.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/05 10:48:59 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/10 15:28:44 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/07/12 15:06:25 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/07/12 15:07:49 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-int		ft_lstcontains(t_list *lst, void *sn, int (*check)(t_list *cn, void *sn))
+void	*ft_lstpeeklast(t_list *lst)
 {
-	while (lst)
-	{
-		if (check(lst, sn))
-			return (1);
+	if (!lst)
+		return (NULL);
+	while (lst->next)
 		lst = lst->next;
-	}
-	return (0);
+	return (lst->content);
 }
