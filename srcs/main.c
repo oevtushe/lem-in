@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:27:51 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/12 17:36:14 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/13 14:07:48 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,14 @@ void	multipaths(t_lmdata *data, t_pair *extra)
 	decode_paths(paths);
 }
 */
+
+int		data_int(t_list *elem, void *data)
+{
+	if (*(int*)elem->content == *(int*)data)
+		return (1);
+	return (0);
+}
+
 int		backtracking(t_lmdata *data, t_list **paths, int root)
 {
 	int			o;
@@ -175,6 +183,12 @@ int		backtracking(t_lmdata *data, t_list **paths, int root)
 			else
 			{
 				ft_printf("overlap: %s\n", ((t_node*)data->adj[lo]->content)->name);
+				/* In case of collapsing with nodes not from current path */
+				if (!ft_lstcontains((*paths)->content, &lo, data_int))
+				{
+					*paths = (*paths)->next;
+					return (lo);
+				}
 				*paths = (*paths)->next;
 				data->extra->fst = source.nodes;
 				add_to_blacklist(&source.black_list, lo);
@@ -211,7 +225,7 @@ int		main(void)
 	while (pr && get_next_line(0, &line))
 	{
 		len = ft_strlen(line);
-		if (len > 1 && line[0] == '#' && line[1] == '#')
+		if (data_type == 0 && len > 1 && line[0] == '#' && line[1] == '#')
 			parse_command(line, &cmd_mode, extra);
 		else if (len > 0 && line[0] == '#')
 		{
@@ -250,7 +264,8 @@ int		main(void)
 #endif
 	//multipaths(data, extra);
 	paths = NULL;
-	backtracking(data, &paths, 0);
+	int res;
+	res = backtracking(data, &paths, 0);
 	pdecode_paths(data, paths);
 #ifdef DEBUG
 	while (pr < data->adj_cs)

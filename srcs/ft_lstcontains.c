@@ -6,17 +6,17 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/05 10:48:59 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/10 15:28:44 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/13 13:30:23 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-int		ft_lstcontains(t_list *lst, void *sn, int (*check)(t_list *cn, void *sn))
+int		ft_lstcontains(t_list *lst, void *data, int (*check)(t_list *elem, void *data))
 {
 	while (lst)
 	{
-		if (check(lst, sn))
+		if (check(lst, data))
 			return (1);
 		lst = lst->next;
 	}

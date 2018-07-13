@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:31:45 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/12 15:08:27 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/13 13:30:52 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ typedef struct	s_source
 void		*ft_lstpeeklast(t_list *lst);
 void		*ft_lstdequeue(t_list **root);
 t_pair		*ft_new_pair(void *fst, void *scd);
-int			ft_lstcontains(t_list *lst, void *sn, int (*check)(t_list *cn, void *sn));
+int			ft_lstcontains(t_list *lst, void *data, int (*check)(t_list *elem, void *data));
 int			ft_arrcontains(void **arr, int size, void *data, int (*check)(void *elem, void *data));
 int			add_link(t_lmdata *data, char *fst, char *scd);
 t_list		*clone_node(t_list *room);
