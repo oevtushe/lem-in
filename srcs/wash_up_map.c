@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/10 15:56:37 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/10 15:56:58 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/13 15:31:16 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ static void	wash_up(t_list *elem)
 	t_node *node;
 
 	node = (t_node*)elem->content;
-	node->d = 0;
-	node->p = 0;
+	node->d = -1;
+	node->p = -1;
 	node->visited = 0;
 }
 

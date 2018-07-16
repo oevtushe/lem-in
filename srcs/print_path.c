@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/10 20:48:15 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/12 13:29:26 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/13 15:27:39 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void		print_path(t_lmdata *data)
 	t_node	*end;
 
 	end = (t_node*)((t_list*)data->extra->scd)->content; 
-	if (!end->d)
+	if (end->d == -1)
 	{
 		ft_printf("There is no path between start and end !\nERROR\n");
 		return ;

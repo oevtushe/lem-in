@@ -1,26 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   new_node.c                                         :+:      :+:    :+:   */
+/*   pdecode_paths.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/13 16:07:49 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/14 10:09:28 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/07/14 10:04:01 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/07/14 10:04:43 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-t_node	*new_node(char *line, int x, int y)
+void	pdecode_paths(t_lmdata *data, t_list *paths)
 {
-	t_node	*node;
+	t_list *p;
 
-	node = (t_node*)ft_memalloc(sizeof(t_node));
-	node->name = ft_strdup(line);
-	node->x = x;
-	node->y = y;
-	node->d = -1;
-	node->p	= 0;
-	return (node);
+	while (paths)
+	{
+		p = (t_list *)paths->content;
+
+		ft_printf("%s", ((t_node*)data->adj[*(int*)p->content]->content)->name);
+		p = p->next;
+		while (p)
+		{
+			ft_printf("->%s", ((t_node*)data->adj[*(int*)p->content]->content)->name);
+			p = p->next;
+		}
+		paths = paths->next;
+		ft_putchar('\n');
+	}
 }

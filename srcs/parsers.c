@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/10 15:57:56 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/10 16:03:21 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/14 13:18:06 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,14 @@ int		parse_room(char *line, t_lmdata *data, int cmd_mode, t_pair *extra)
 	arr = ft_strsplit(line, ' ');
 	len = ft_arr_len((void**)arr);
 	res = 0;
+	if (arr[0] && ft_strchr(arr[0], '-'))
+		return (0);
 	if (len != 3)
-		return (0);
+		return (3);
 	if (arr[0][0] == 'L' || arr[0][0] == '#')
-		return (0);
-	if (!ft_isvldint(arr[1]) || !ft_isvldint(arr[2]) || ft_strchr(arr[0], '-'))
-		return (0);
+		return (2);
+	if (!ft_isvldint(arr[1]) || !ft_isvldint(arr[2]))
+		return (5);
 #ifdef DEBUG
 	ft_printf("room_name = %s\n", arr[0]);
 	ft_printf("x = %s\n", arr[1]);
@@ -112,10 +114,8 @@ int		parse_room(char *line, t_lmdata *data, int cmd_mode, t_pair *extra)
 		}
 		ft_memdel((void**)&rd);
 	}
-#ifdef DEBUG
 	else
-		ft_printf("This room already exists !\n");
-#endif
+		res = 4;
 	ft_free_parr((void***)&arr);
 	return (res);
 }
@@ -131,18 +131,18 @@ int		parse_link(char *line, t_lmdata *data)
 	res = 0;
 	len = data->adj_as;
 	if (!(st1 = ft_strchr(line, '-')) || ft_strchr(st1 + 1, '-'))
-		return (0);
+		return (6);
 	arr = ft_strsplit(line, '-');
 	len = ft_arr_len((void**)arr);
 	if (len != 2)
-		return (0);
+		return (6);
 	st1 = ft_strtrim(arr[0]);
 	st2 = ft_strtrim(arr[1]);
 	if (ft_strchr(st1, ' ') || ft_strchr(st2, ' ') || !*st1 || !*st2)
 	{
 		ft_strdel(&st1);
 		ft_strdel(&st2);
-		return (0);
+		return (6);
 	}
 	if (add_link(data, st1, st2))
 	{

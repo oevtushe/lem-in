@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   new_node.c                                         :+:      :+:    :+:   */
+/*   error_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/13 16:07:49 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/14 10:09:28 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/07/14 12:26:52 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/07/14 13:03:16 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-t_node	*new_node(char *line, int x, int y)
+void	error_handler(int error)
 {
-	t_node	*node;
-
-	node = (t_node*)ft_memalloc(sizeof(t_node));
-	node->name = ft_strdup(line);
-	node->x = x;
-	node->y = y;
-	node->d = -1;
-	node->p	= 0;
-	return (node);
+	if (error == 2)
+		ft_printf("The room name can't contain 'L' and '#' characters.\n");
+	else if (error == 3)
+		ft_printf("Wrong room specification.\nRoom format: <room_name> <x> <y>\n");
+	else if (error == 4)
+		ft_printf("This room already exists\n");
+	else if (error == 5)
+		ft_printf("Bad coordinates\n");
+	else if (error == 6)
+		ft_printf("Wrong link format.\nFormat: <name1>-<name2>\n");
 }

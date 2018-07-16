@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:27:51 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/13 14:07:48 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/14 12:58:16 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,165 +43,9 @@ void	print_links(t_list *node)
 	ft_printf("p -> %d\n", room->p);
 }
 
-
 void	print(t_list *node)
 {
 	ft_printf("%d\n", *(int*)node->content);
-}
-
-void	pdecode_paths(t_lmdata *data, t_list *paths)
-{
-	t_list *p;
-
-	while (paths)
-	{
-		p = (t_list *)paths->content;
-
-		ft_printf("%s", ((t_node*)data->adj[*(int*)p->content]->content)->name);
-		p = p->next;
-		while (p)
-		{
-			ft_printf("->%s", ((t_node*)data->adj[*(int*)p->content]->content)->name);
-			p = p->next;
-		}
-		paths = paths->next;
-		ft_putchar('\n');
-	}
-}
-
-void	decode_paths(t_list *paths)
-{
-	t_list *p;
-
-	while (paths)
-	{
-		p = (t_list *)paths->content;
-		ft_printf("\nPath:\n");
-		ft_lstiter(p, print);
-		paths = paths->next;
-	}
-}
-
-int		check_overlapping(t_list *paths, t_list *path)
-{
-	t_list *new_nodes;
-	t_list *old_nodes;
-
-	while (paths)
-	{
-		// ignore end
-		old_nodes = ((t_list*)paths->content)->next;
-		while (old_nodes)
-		{
-			// ignore end
-			new_nodes = path->next;
-			while (new_nodes)
-			{
-				if (*(int*)old_nodes->content == *(int*)new_nodes->content)
-					return (*(int*)old_nodes->content);
-				new_nodes = new_nodes->next;
-			}
-			old_nodes = old_nodes->next;
-		}
-		paths = paths->next;
-	}
-	return (-1);
-}
-/*
-void	multipaths(t_lmdata *data, t_pair *extra)
-{
-	t_list *start;
-	t_pair *extra_tmp;
-	t_list *paths;
-	t_path *path;
-	t_list *tmp;
-	int		idx;
-
-	paths = NULL;
-	idx = 0;
-	extra_tmp = ft_memalloc(sizeof(t_pair));
-	extra_tmp->scd = extra->scd;
-	start = ((t_list*)extra->fst)->next;
-
-	while (start)
-	{
-		path = ft_memalloc(sizeof(t_path));
-		path->black_list = ft_lstnew(&idx, sizeof(int));
-		bfs(data, start, path->black_list);
-		extra_tmp->fst = start;
-		print_path(data, extra_tmp);
-		save_path_ro(data, extra_tmp, &path);
-		ft_printf("Last common node: %d\n", check_overlapping(paths, path));
-		wash_up_map(data);
-		start = start->next;
-		tmp = ft_lstnew(path, sizeof(t_path));
-		ft_lstadd(&paths, tmp);
-		ft_memdel((void**)&path);
-	}
-	decode_paths(paths);
-}
-*/
-
-int		data_int(t_list *elem, void *data)
-{
-	if (*(int*)elem->content == *(int*)data)
-		return (1);
-	return (0);
-}
-
-int		backtracking(t_lmdata *data, t_list **paths, int root)
-{
-	int			o;
-	int			lo;
-	t_list		*path;
-	t_source	source;
-
-	path = NULL;
-	source.black_list = NULL;
-	add_to_blacklist(&source.black_list, root);
-	if (!(source.nodes = ((t_list*)data->extra->fst)->next))
-		return (-1);
-	data->extra->fst = source.nodes;
-	wash_up_map(data);
-	bfs(data, source.nodes, source.black_list);
-	save_path_ro(data, &path);
-	print_path(data);
-	while (((t_node*)((t_list*)data->extra->scd)->content)->p != 0)
-	{
-		if ((o = check_overlapping(*paths, path)) != -1)
-		{
-			ft_printf("overlap: %s\n", ((t_node*)data->adj[o]->content)->name);
-			pdecode_paths(data, *paths);
-			add_to_blacklist(&source.black_list, o);
-		}
-		else
-		{
-			ft_lstadd(paths, ft_lstnew(path, sizeof(t_list)));
-			pdecode_paths(data, *paths);
-			if ((lo = backtracking(data, paths, root)) == -1)
-				return (-1);
-			else
-			{
-				ft_printf("overlap: %s\n", ((t_node*)data->adj[lo]->content)->name);
-				/* In case of collapsing with nodes not from current path */
-				if (!ft_lstcontains((*paths)->content, &lo, data_int))
-				{
-					*paths = (*paths)->next;
-					return (lo);
-				}
-				*paths = (*paths)->next;
-				data->extra->fst = source.nodes;
-				add_to_blacklist(&source.black_list, lo);
-			}
-		}
-		path = NULL;
-		wash_up_map(data);
-		bfs(data, source.nodes, source.black_list);
-		print_path(data);
-		save_path_ro(data, &path);
-	}
-	// return first overlap
-	return (*(int*)source.black_list->next->content);
 }
 
 int		main(void)
@@ -213,7 +57,7 @@ int		main(void)
 	int			pr;
 	t_lmdata	*data;
 	t_pair		*extra;
-	t_list		*paths;
+	t_pair		*paths;
 
 	line = NULL;
 	cmd_mode = 0;
@@ -222,7 +66,7 @@ int		main(void)
 	data = new_data(1);
 	extra = (t_pair *)ft_memalloc(sizeof(t_pair));
 	pr = read_ants(&data->ants);
-	while (pr && get_next_line(0, &line))
+	while (pr == 1 && get_next_line(0, &line))
 	{
 		len = ft_strlen(line);
 		if (data_type == 0 && len > 1 && line[0] == '#' && line[1] == '#')
@@ -248,8 +92,10 @@ int		main(void)
 			pr = 0;
 		ft_strdel(&line);
 	}
-	if (!pr || !extra->fst || !extra->scd)
+	if (pr != 1 || !extra->fst || !extra->scd)
 	{
+		ft_printf("%d\n", pr);
+		error_handler(pr);
 		ft_printf("ERROR\n");
 		return (1);
 	}
@@ -263,10 +109,10 @@ int		main(void)
 	ft_printf("%s\n", ((t_node*)((t_list*)extra->scd)->content)->name);
 #endif
 	//multipaths(data, extra);
-	paths = NULL;
+	paths = ft_memalloc(sizeof(t_pair));
 	int res;
-	res = backtracking(data, &paths, 0);
-	pdecode_paths(data, paths);
+	res = backtracking(data, paths, 0);
+	pdecode_paths(data, (t_list*)paths->fst);
 #ifdef DEBUG
 	while (pr < data->adj_cs)
 	{
