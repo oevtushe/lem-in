@@ -1,24 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   new_data.c                                         :+:      :+:    :+:   */
+/*   add_path_to_blacklist.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/13 15:40:57 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/17 12:21:28 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/07/17 10:41:17 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/07/17 11:26:41 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-t_lmdata	*new_data(int adj_ds)
+static t_list *clone_path_node(t_list *elem)
 {
-	t_lmdata	*data;
+	t_list *new;
 
-	data = (t_lmdata*)ft_memalloc(sizeof(t_lmdata));
-	data->adj = (t_list **)ft_memalloc(sizeof(t_list *) * adj_ds);
-	data->adj_as = adj_ds;
-	data->extra = (t_pair *)ft_memalloc(sizeof(t_pair));
-	return (data);
+	new = ft_lstnew(elem->content, elem->content_size);
+	return (new);
+}
+
+void	add_path_to_blacklist(t_list **black_list, t_list *path)
+{
+	t_list *copy;
+
+	if (path)
+	{
+		copy = ft_lstmap(path->next, clone_path_node);
+		ft_lstpop(&copy);
+		ft_lstappend(black_list, copy);
+	}
 }

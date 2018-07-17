@@ -6,7 +6,7 @@
 #    By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/12 10:30:58 by oevtushe          #+#    #+#              #
-#    Updated: 2018/07/14 12:33:36 by oevtushe         ###   ########.fr        #
+#    Updated: 2018/07/17 11:27:10 by oevtushe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,34 +23,34 @@ FTP_DIR				:= $(FTM_DIR)/ft_printf
 include 			$(FTM_DIR)/Libftmulti.mk
 include				$(FT_DIR)/Pretty.mk
 
-LN_SRCF				:= main.c				\
-					   ft_arr_len.c			\
-					   ft_free_parr.c		\
-					   ft_realloc.c			\
-					   new_node.c			\
-					   print_rooms.c		\
-					   del_node.c			\
-					   realloc_adj.c		\
-					   get_node_idx.c		\
-					   new_room_node.c		\
-					   add_link.c			\
-					   ft_lstcontains.c		\
-					   ft_lstcontains.c		\
-					   ft_arrcontains.c		\
-					   ft_new_pair.c		\
-					   ft_lstdequeue.c		\
-					   clone_node.c			\
-					   print_path.c			\
-					   save_path.c			\
-					   bfs.c				\
-					   wash_up_map.c		\
-					   parsers.c			\
-					   add_to_blacklist.c	\
-					   ft_lstpeeklast.c		\
-					   backtracking.c		\
-					   check_overlapping.c	\
-					   pdecode_paths.c		\
-					   error_handler.c		\
+LN_SRCF				:= main.c					\
+					   ft_arr_len.c				\
+					   ft_free_parr.c			\
+					   ft_realloc.c				\
+					   new_node.c				\
+					   print_rooms.c			\
+					   del_node.c				\
+					   realloc_adj.c			\
+					   get_node_idx.c			\
+					   new_room_node.c			\
+					   add_link.c				\
+					   ft_lst_get_node_idx.c	\
+					   ft_lstcontains.c			\
+					   ft_arrcontains.c			\
+					   ft_new_pair.c			\
+					   ft_lstdequeue.c			\
+					   clone_node.c				\
+					   print_path.c				\
+					   save_path.c				\
+					   bfs.c					\
+					   wash_up_map.c			\
+					   parsers.c				\
+					   add_path_to_blacklist.c	\
+					   ft_lstpeeklast.c			\
+					   check_overlapping.c		\
+					   pdecode_paths.c			\
+					   error_handler.c			\
+					   ft_lstpop.c				\
 					   new_data.c
 LN_DEPF				:= lem_in.h
 

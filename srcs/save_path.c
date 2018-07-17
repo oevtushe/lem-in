@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/10 15:15:51 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/13 15:36:30 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/17 11:48:20 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void		save_path_ro(t_lmdata *data, t_list **path)
 	while (idx_cur != -1)
 	{
 		n = ft_lstnew(&idx_cur, sizeof(int));
-		ft_lstappend(path, n);
+		ft_lstadd(path, n);
 		idx_cur = ((t_node*)data->adj[idx_cur]->content)->p;
 	}
 	((t_node*)((t_list*)data->extra->fst)->content)->p = 0;

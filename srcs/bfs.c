@@ -6,24 +6,20 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/10 15:54:47 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/10 16:10:09 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/17 11:00:25 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-static int	check(t_list *cn, void *sn)
+static int check(t_list *elem, void *data)
 {
-	while (cn)
-	{
-		if (*(int*)cn->content == *(int*)sn)
-			return (1);
-		cn = cn->next;
-	}
+	if (*(int*)data == *(int*)elem->content)
+		return (1);
 	return (0);
 }
 
-void		bfs(t_lmdata *data, t_list *start, t_list *black_list)
+void		bfs(t_lmdata *data, t_list *black_list)
 {
 	t_list	*queue;
 	t_node	*u;
@@ -32,7 +28,7 @@ void		bfs(t_lmdata *data, t_list *start, t_list *black_list)
 	int		idx_v;
 
 	queue = NULL;
-	queue = clone_node(start);
+	queue = clone_node((t_list*)data->extra->fst);
 	((t_node *)queue->content)->d = 0;
 	while (queue)
 	{
@@ -42,7 +38,7 @@ void		bfs(t_lmdata *data, t_list *start, t_list *black_list)
 		while (v)
 		{
 			idx_v = get_node_idx(data, ((t_node*)v->content)->name);
-			if (!((t_node*)v->content)->visited && !ft_lstcontains(black_list, &idx_v, check))
+			if (!((t_node*)v->content)->visited && ft_lst_get_node_idx(black_list, &idx_v, check) == -1)
 			{
 				((t_node*)v->content)->d = u->d + 1;
 				((t_node*)v->content)->p = idx_u;

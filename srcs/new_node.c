@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 16:07:49 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/14 10:09:28 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/17 10:49:01 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,6 @@ t_node	*new_node(char *line, int x, int y)
 	node->x = x;
 	node->y = y;
 	node->d = -1;
-	node->p	= 0;
+	node->p	= -1;
 	return (node);
 }

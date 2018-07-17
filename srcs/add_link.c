@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/05 09:39:57 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/10 15:38:48 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/16 18:20:11 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ int		add_link(t_lmdata *data, char *fst, char *scd)
 #ifdef DEBUG
 		ft_printf("I know this nodes !!!\n");
 #endif
-		if (!ft_lstcontains(data->adj[i], data->adj[j], check) &&
-				!ft_lstcontains(data->adj[j], data->adj[i], check))
+		if (ft_lst_get_node_idx(data->adj[i], data->adj[j], check) == -1 &&
+				ft_lst_get_node_idx(data->adj[j], data->adj[i], check) == -1)
 		{
 #ifdef DEBUG
 			ft_printf("Add new node to %s\n", ((t_node*)data->adj[i]->content)->name);

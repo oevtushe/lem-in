@@ -6,17 +6,24 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/14 09:54:45 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/14 09:54:52 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/16 18:24:20 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
+/*
+** Returns index of path with which overlapping has place.
+** If no overlapping returns -1
+*/
+
 int		check_overlapping(t_list *paths, t_list *path)
 {
-	t_list *new_nodes;
-	t_list *old_nodes;
+	int		idx;
+	t_list	*new_nodes;
+	t_list	*old_nodes;
 
+	idx = 0;
 	while (paths)
 	{
 		// ignore end
@@ -28,12 +35,13 @@ int		check_overlapping(t_list *paths, t_list *path)
 			while (new_nodes)
 			{
 				if (*(int*)old_nodes->content == *(int*)new_nodes->content)
-					return (*(int*)old_nodes->content);
+					return (idx);
 				new_nodes = new_nodes->next;
 			}
 			old_nodes = old_nodes->next;
 		}
 		paths = paths->next;
+		++idx;
 	}
 	return (-1);
 }

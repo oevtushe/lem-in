@@ -1,21 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   add_to_blacklist.c                                 :+:      :+:    :+:   */
+/*   ft_lst_get_node_idx.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/10 20:57:12 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/12 15:12:58 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/07/16 18:18:56 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/07/16 18:18:57 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-void	add_to_blacklist(t_list **black_list, int elem)
-{
-	t_list *node;
+/*
+** Function returns index of searched element in the list.
+** If element wasn't found returns -1
+*/
 
-	node = ft_lstnew(&elem, sizeof(int));
-	ft_lstappend(black_list, node);
+int		ft_lst_get_node_idx(t_list *lst, void *data, int (*check)(t_list *elem, void *data))
+{
+	int i;
+
+	i = 0;
+	while (lst)
+	{
+		if (check(lst, data))
+			return (i);
+		lst = lst->next;
+		++i;
+	}
+	return (-1);
 }
