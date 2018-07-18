@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/10 15:57:56 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/17 16:10:46 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/18 11:17:42 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,18 @@ int		parse_command(char *line, int *cmd_mode, t_pair *extra)
 		if (!extra->fst && !*cmd_mode)
 			*cmd_mode = 1;
 		else if (!*cmd_mode)
-			stat = 7;
+			stat = ER_CMD_DOUBLE_START;
 		else
-			stat = 9;
+			stat = ER_CMD_BAD_USING;
 	}
 	else if (ft_strequ(&line[2], "end"))
 	{
 		if (!extra->scd && !*cmd_mode)
 			*cmd_mode = 2;
 		else if (!*cmd_mode)
-			stat = 8;
+			stat = ER_CMD_DOUBLE_END;
 		else
-			stat = 9;
+			stat = ER_CMD_BAD_USING;
 	}
 	return (stat);
 }
@@ -58,15 +58,14 @@ int		parse_room(char *line, t_lmdata *data, int cmd_mode, t_pair *extra)
 
 	arr = ft_strsplit(line, ' ');
 	len = ft_arr_len((void**)arr);
-	res = 0;
 	if (arr[0] && ft_strchr(arr[0], '-'))
 		return (0);
 	if (len != 3)
-		return (3);
+		return (ER_ROOM_BAD_FORMAT);
 	if (arr[0][0] == 'L' || arr[0][0] == '#')
-		return (2);
+		return (ER_ROOM_BAD_NAME);
 	if (!ft_isvldint(arr[1]) || !ft_isvldint(arr[2]))
-		return (5);
+		return (ER_ROOM_BAD_COORD);
 	if (data->adj_cs >= data->adj_as)
 		realloc_adj(data);
 	if (!ft_arrcontains((void**)data->adj, data->adj_cs, arr[0], check_arr))
@@ -81,7 +80,7 @@ int		parse_room(char *line, t_lmdata *data, int cmd_mode, t_pair *extra)
 		ft_memdel((void**)&rd);
 	}
 	else
-		res = 4;
+		res = ER_ROOM_DOUBLE_DEF;
 	ft_free_parr((void***)&arr);
 	return (res);
 }
@@ -97,21 +96,20 @@ int		parse_link(char *line, t_lmdata *data)
 	res = 0;
 	len = data->adj_as;
 	if (!(st1 = ft_strchr(line, '-')) || ft_strchr(st1 + 1, '-'))
-		return (6);
+		return (ER_LINK_BAD_FORMAT);
 	arr = ft_strsplit(line, '-');
 	len = ft_arr_len((void**)arr);
 	if (len != 2)
-		return (6);
+		return (ER_LINK_BAD_FORMAT);
 	st1 = ft_strtrim(arr[0]);
 	st2 = ft_strtrim(arr[1]);
 	if (ft_strchr(st1, ' ') || ft_strchr(st2, ' ') || !*st1 || !*st2)
 	{
 		ft_strdel(&st1);
 		ft_strdel(&st2);
-		return (6);
+		return (ER_LINK_BAD_FORMAT);
 	}
-	if (add_link(data, st1, st2))
-		res = 1;
+	res = add_link(data, st1, st2);
 	ft_free_parr((void***)&arr);
 	return (res);
 }

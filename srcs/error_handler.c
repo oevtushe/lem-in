@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/14 12:26:52 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/17 16:26:53 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/18 11:13:54 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,36 @@
 
 void	error_handler(int error)
 {
-	if (error == 2)
-		ft_printf("The room name can't contain 'L' and '#' characters.\n");
-	else if (error == 3)
-		ft_printf("Bad room format\n");
-	else if (error == 4)
-		ft_printf("This room already exists\n");
-	else if (error == 5)
-		ft_printf("Bad coordinates\n");
-	else if (error == 6)
-		ft_printf("Bad link format\n");
-	else if (error == 7)
-		ft_printf("Double start definition isn't allowed\n");
-	else if (error == 8)
-		ft_printf("Double end definition isn't allowed\n");
-	else if (error == 9)
-		ft_printf("Bad command using\n");
-	else if (error == 10)
-		ft_printf("Invalid number of ants\n");
+	if (error == ER_ROOM_BAD_NAME)
+		ft_printf("Error: The room name can't contain 'L' and '#' characters.\n");
+	else if (error == ER_ROOM_BAD_FORMAT)
+		ft_printf("Error: Bad room format\n");
+	else if (error == ER_ROOM_DOUBLE_DEF)
+		ft_printf("Error: This room already exists\n");
+	else if (error == ER_ROOM_BAD_COORD)
+		ft_printf("Error: Bad coordinates\n");
+	else if (error == ER_LINK_BAD_FORMAT)
+		ft_printf("Error: Bad link format\n");
+	else if (error == ER_CMD_DOUBLE_START)
+		ft_printf("Error: Double start definition\n");
+	else if (error == ER_CMD_DOUBLE_END)
+		ft_printf("Error: Double end definition\n");
+	else if (error == ER_CMD_BAD_USING)
+		ft_printf("Error: Bad command using\n");
+	else if (error == ER_ANTS_INV_NUMBER)
+		ft_printf("Error: Invalid number of ants\n");
+	else if (error == ER_DATA_EMPTY)
+		ft_printf("Error: No input data\n");
+	else if (error == ER_DATA_NO_START)
+		ft_printf("Error: No start\n");
+	else if (error == ER_DATA_NO_END)
+		ft_printf("Error: No end\n");
+	else if (error == ER_DATA_NO_START_END)
+		ft_printf("Error: No start and end\n");
+	else if (error == ER_LINK_DOUBLE)
+		ft_printf("Error: this nodes are already linked\n");
+	else if (error == ER_LINK_SELF)
+		ft_printf("Error: selflink\n");
+	else if (error == ER_LINK_UNEXISTED_ROOM)
+		ft_printf("Error: using unexisted room(s)\n");
 }

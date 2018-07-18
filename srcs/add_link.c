@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/05 09:39:57 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/16 18:20:11 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/18 11:13:55 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,34 +29,25 @@ int		add_link(t_lmdata *data, char *fst, char *scd)
 	int		res;
 	t_list	*clone;
 
-	res = 0;
+	res = ER_LINK_UNEXISTED_ROOM;
 	if ((i = get_node_idx(data, fst)) >= 0 && (j = get_node_idx(data, scd)) >= 0)
 	{
-#ifdef DEBUG
-		ft_printf("I know this nodes !!!\n");
-#endif
 		if (ft_lst_get_node_idx(data->adj[i], data->adj[j], check) == -1 &&
 				ft_lst_get_node_idx(data->adj[j], data->adj[i], check) == -1)
 		{
-#ifdef DEBUG
-			ft_printf("Add new node to %s\n", ((t_node*)data->adj[i]->content)->name);
-#endif
 			clone = clone_node(data->adj[j]);
 			ft_lstappend(&data->adj[i], clone);
-#ifdef DEBUG
-			ft_printf("Add new node to %s\n", ((t_node*)data->adj[j]->content)->name);
-#endif
 			clone = clone_node(data->adj[i]);
 			ft_lstappend(&data->adj[j], clone);
+			res = 1;
 		}
-#ifdef DEBUG
 		else
 		{
-			ft_printf("This nodes are already linked OR This is a self-link!\n");
-			return (0);
+			if (i == j)
+				res = ER_LINK_SELF;
+			else
+				res = ER_LINK_DOUBLE;
 		}
-#endif
-		res = 1;
 	}
 	return (res);
 }

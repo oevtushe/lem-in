@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:27:51 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/17 16:35:23 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/18 10:33:05 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int		read_ants(int *ants)
 	char	*line;
 	int		st;
 
-	st = 0;
+	st = ER_DATA_EMPTY;
 	line = NULL;
 	if (get_next_line(0, &line))
 	{
@@ -29,7 +29,7 @@ int		read_ants(int *ants)
 				st = 1;
 		}
 		else
-			st = 10;
+			st = ER_ANTS_INV_NUMBER;
 		ft_strdel(&line);
 	}
 	return (st);
@@ -62,24 +62,33 @@ void	choose_one(t_list **paths, t_list *path, int idx)
 	}
 }
 
+/*
+** Magic in case when start and end is the only nodes.
+*/
+
 t_list	*get_paths(t_lmdata *data)
 {
 	t_list	*path;
 	t_list	*paths;
 	t_list	*black_list;
+	int		magic;
 
 	path = NULL;
 	paths = NULL;
 	black_list = NULL;
 	bfs(data, black_list);
+	magic = 0;
+	if (((t_node*)((t_list*)data->extra->scd)->content)->p == \
+			get_node_idx(data, ((t_node*)((t_list*)data->extra->fst)->content)->name))
+		magic = 1;
 	while (((t_node*)((t_list*)data->extra->scd)->content)->p != -1)
 	{
-		//print_path(data);
-		save_path_ro(data, &path);
+		save_path(data, &path);
 		ft_lstadd(&paths, ft_lstnew(path, sizeof(t_list)));
 		add_path_to_blacklist(&black_list, path);
 		wash_up_map(data);
-		bfs(data, black_list);
+		if (!magic)
+			bfs(data, black_list);
 		path = NULL;
 	}
 	return (paths);
@@ -108,7 +117,7 @@ void	parse(t_lmdata **data, char **line, t_rdata *rdata)
 		rdata->pr = parse_link(*line, *data);
 	}
 	else
-		rdata->pr = 0;
+		rdata->pr = ER_PASS_FURTHER;
 }
 
 t_lmdata *read_data(void)
@@ -117,6 +126,7 @@ t_lmdata *read_data(void)
 	char 		*line;
 	t_rdata		rdata;
 
+	data = NULL;
 	init_data(&data, &line, &rdata);
 	rdata.pr = read_ants(&data->ants);
 	while (rdata.pr == 1 && get_next_line(0, &line))
@@ -124,7 +134,15 @@ t_lmdata *read_data(void)
 		parse(&data, &line, &rdata);
 		ft_strdel(&line);
 	}
-	if (rdata.pr != 1 || !data->extra->fst || !data->extra->scd)
+	if (rdata.pr == 1 && (!data->extra->fst || !data->extra->scd))
+		rdata.pr = ER_PASS_FURTHER;
+	if (rdata.pr == ER_PASS_FURTHER && !data->extra->fst && !data->extra->scd)
+		rdata.pr = ER_DATA_NO_START_END;
+	else if  (rdata.pr == ER_PASS_FURTHER && !data->extra->fst)
+		rdata.pr = ER_DATA_NO_START;
+	else if (rdata.pr == ER_PASS_FURTHER && !data->extra->scd)
+		rdata.pr = ER_DATA_NO_END;
+	if (rdata.pr != 1)
 	{
 		error_handler(rdata.pr);
 		return (NULL);
@@ -140,8 +158,10 @@ int		main(void)
 	data = read_data();
 	if (data)
 	{
-		paths = get_paths(data);
-		pdecode_paths(data, paths);
+		if ((paths = get_paths(data)))
+			pdecode_paths(data, paths);
+		else
+			ft_printf("Error: no path between start and end\n");
 	}
 	return (0);
 }

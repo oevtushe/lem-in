@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:31:45 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/17 12:18:32 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/18 11:20:53 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,24 @@
 
 # include "ft_printf.h"
 # include "get_next_line.h"
+
+# define ER_ROOM_BAD_NAME 2
+# define ER_ROOM_BAD_FORMAT 3
+# define ER_ROOM_DOUBLE_DEF 4
+# define ER_ROOM_BAD_COORD 5
+# define ER_LINK_BAD_FORMAT 6
+# define ER_LINK_SELF 16
+# define ER_LINK_DOUBLE 17
+# define ER_LINK_UNEXISTED_ROOM 18
+# define ER_CMD_DOUBLE_START 7
+# define ER_CMD_DOUBLE_END 8
+# define ER_CMD_BAD_USING 9
+# define ER_ANTS_INV_NUMBER 10
+# define ER_DATA_EMPTY 11
+# define ER_DATA_NO_START 12
+# define ER_DATA_NO_END 13
+# define ER_DATA_NO_START_END 14
+# define ER_PASS_FURTHER 15
 
 typedef struct	s_rdata
 {
@@ -37,6 +55,12 @@ typedef struct	s_lmdata
 	t_pair	*extra;
 	t_list	**adj;
 }				t_lmdata;
+
+typedef struct	s_err
+{
+	int err_code;
+	void *extra;
+}				t_err;
 
 typedef	struct	s_node
 {
@@ -78,7 +102,7 @@ void		del_node(void *content, size_t content_size);
 t_list		*new_room_node(char *name, int x, int y);
 void		free_node(t_node **node);
 void		print_path(t_lmdata *data);
-void		save_path_ro(t_lmdata *data, t_list **path);
+void		save_path(t_lmdata *data, t_list **path);
 void		bfs(t_lmdata *data, t_list *black_list);
 void		wash_up_map(t_lmdata *data);
 void		add_path_to_blacklist(t_list **black_list, t_list *path);

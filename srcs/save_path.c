@@ -6,13 +6,13 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/10 15:15:51 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/17 11:48:20 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/17 16:55:56 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-void		save_path_ro(t_lmdata *data, t_list **path)
+void		save_path(t_lmdata *data, t_list **path)
 {
 	int		idx_cur;
 	int		idx_end;

@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/17 10:41:17 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/17 11:26:41 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/17 16:46:03 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	add_path_to_blacklist(t_list **black_list, t_list *path)
 	{
 		copy = ft_lstmap(path->next, clone_path_node);
 		ft_lstpop(&copy);
-		ft_lstappend(black_list, copy);
+		if (copy)
+			ft_lstappend(black_list, copy);
 	}
 }
