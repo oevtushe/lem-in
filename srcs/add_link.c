@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/05 09:39:57 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/18 11:13:55 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/19 19:28:32 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,27 @@ static int		check(t_list *n, void *sn)
 	return (ft_strequ(n1->name, n2->name));
 }
 
-int		add_link(t_lmdata *data, char *fst, char *scd)
+static t_err	*gen_dlink_err(char *fst, char *scd)
+{
+	t_err	*err;
+	t_pair	*pair;
+
+	pair = ft_newpair(fst, ft_strlen(fst) + 1, scd, ft_strlen(scd) + 1);
+	err = new_err(ER_LINK_DOUBLE, pair, sizeof(t_pair));
+	ft_memdel((void**)&pair);
+	return (err);
+}
+
+t_err			*add_link(t_lmdata *data, char *fst, char *scd)
 {
 	int		i;
 	int		j;
-	int		res;
+	int		ec;
+	t_err	*err;
 	t_list	*clone;
 
-	res = ER_LINK_UNEXISTED_ROOM;
+	err = NULL;
+	ec = ER_LINK_NOT_EXISTING_ROOM;
 	if ((i = get_node_idx(data, fst)) >= 0 && (j = get_node_idx(data, scd)) >= 0)
 	{
 		if (ft_lst_get_node_idx(data->adj[i], data->adj[j], check) == -1 &&
@@ -39,15 +52,23 @@ int		add_link(t_lmdata *data, char *fst, char *scd)
 			ft_lstappend(&data->adj[i], clone);
 			clone = clone_node(data->adj[i]);
 			ft_lstappend(&data->adj[j], clone);
-			res = 1;
+			ec = 1;
 		}
 		else
 		{
+			ec = 0;
 			if (i == j)
-				res = ER_LINK_SELF;
+				err = new_err(ER_LINK_SELF, fst, ft_strlen(fst) + 1);
 			else
-				res = ER_LINK_DOUBLE;
+				err = gen_dlink_err(fst, scd);
 		}
 	}
-	return (res);
+	if (ec == ER_LINK_NOT_EXISTING_ROOM)
+	{
+		if (i == -1)
+			err = new_err(ec, fst, ft_strlen(fst) + 1);
+		else
+			err = new_err(ec, scd, ft_strlen(scd) + 1);
+	}
+	return (err);
 }

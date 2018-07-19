@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_new_pair.c                                      :+:      :+:    :+:   */
+/*   new_err.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/07 18:59:50 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/07 19:11:05 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/07/18 11:26:41 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/07/18 11:28:48 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-t_pair	*ft_new_pair(void *fst, void *scd)
+t_err *new_err(int err_code, void *extra, size_t extra_len)
 {
-	t_pair *pair;
+	t_err *err;
 
-	pair = (t_pair *)ft_memalloc(sizeof(t_pair));
-	pair->fst = fst;
-	pair->scd = scd;
-	return (pair);
+	err = ft_memalloc(sizeof(t_err));
+	err->err_code = err_code;
+	if (extra)
+		err->extra = ft_memdup(extra, extra_len);
+	return (err);
 }

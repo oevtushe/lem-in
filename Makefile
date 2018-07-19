@@ -6,7 +6,7 @@
 #    By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/12 10:30:58 by oevtushe          #+#    #+#              #
-#    Updated: 2018/07/17 11:27:10 by oevtushe         ###   ########.fr        #
+#    Updated: 2018/07/19 17:01:55 by oevtushe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,9 +35,7 @@ LN_SRCF				:= main.c					\
 					   new_room_node.c			\
 					   add_link.c				\
 					   ft_lst_get_node_idx.c	\
-					   ft_lstcontains.c			\
 					   ft_arrcontains.c			\
-					   ft_new_pair.c			\
 					   ft_lstdequeue.c			\
 					   clone_node.c				\
 					   print_path.c				\
@@ -51,6 +49,11 @@ LN_SRCF				:= main.c					\
 					   pdecode_paths.c			\
 					   error_handler.c			\
 					   ft_lstpop.c				\
+					   new_err.c				\
+					   ft_newpair.c				\
+					   ft_lstdelsafe.c			\
+					   del_link.c				\
+					   ft_strimplode.c			\
 					   new_data.c
 LN_DEPF				:= lem_in.h
 
