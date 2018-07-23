@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/10 15:57:56 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/19 18:43:30 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/23 12:11:10 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,21 @@ t_err	*parse_command(char *line, int *cmd_mode, t_pair *extra)
 		if (!extra->fst && !*cmd_mode)
 			*cmd_mode = 1;
 		else if (!*cmd_mode)
-			err = new_err(ER_CMD_DOUBLE_START, NULL, 0);
+			err = raise_cmd_double_start();
 		else
-			err = new_err(ER_CMD_BAD_USING, NULL, 0);
+			err = raise_cmd_bad_using();
 	}
 	else if (ft_strequ(&line[2], "end"))
 	{
 		if (!extra->scd && !*cmd_mode)
 			*cmd_mode = 2;
 		else if (!*cmd_mode)
-			err = new_err(ER_CMD_DOUBLE_END, NULL, 0);
+			err = raise_cmd_double_end();
 		else
-			err = new_err(ER_CMD_BAD_USING, NULL, 0);
+			err = raise_cmd_bad_using();
 	}
 	else
-		err = new_err(ER_CMD_INV, NULL, 0);
+		err = new_err(ERR_CMD_INV, NULL, 0);
 	return (err);
 }
 
@@ -53,42 +53,27 @@ static int	check_arr(void *elem, void *data)
 static t_err *gen_room_bf_err(char *line, char **arr, int size)
 {
 	t_err	*err;
-	t_pair	*pair;
-	char	*imploded;
 
-	pair = NULL;
-	imploded = NULL;
 	if (size == 1)
-		err = new_err(ER_ROOM_NO_XY, line, ft_strlen(line) + 1);
+		err = raise_room_no_xy(line);
 	else if (size == 2)
-		err = new_err(ER_ROOM_NO_Y, line, ft_strlen(line) + 1);
+		err = raise_room_no_y(line);
 	else
-	{
-		imploded = ft_strimplode(&arr[3], size - 3, " ");
-		pair = ft_newpair(line, ft_strlen(line) + 1, imploded, ft_strlen(imploded) + 1);
-		err = new_err(ER_ROOM_EXTRA_PARMS, pair, sizeof(t_pair));
-		ft_strdel(&imploded);
-		ft_memdel((void**)&pair);
-	}
+		err = raise_room_extra_parms(arr, size, line);
 	return (err);
 }
 
 static t_err	*gen_bad_coord_err(char *num1, char *num2)
 {
 	t_err	*err;
-	t_pair *pair;
 
 	err = NULL;
 	if (!ft_isvldint(num1) && !ft_isvldint(num2))
-	{
-		pair = ft_newpair(num1, ft_strlen(num1) + 1, num2, ft_strlen(num2) + 1);
-		err = new_err(ER_ROOM_BAD_COORD, pair, sizeof(t_pair));
-		ft_memdel((void**)&pair);
-	}
+		err = raise_room_bad_coord(num1, num2);
 	else if (!ft_isvldint(num1))
-		err = new_err(ER_ROOM_BAD_X, num1, ft_strlen(num1) + 1);
+		err = raise_room_bad_x(num1);
 	else if (!ft_isvldint(num2))
-		err = new_err(ER_ROOM_BAD_Y, num2, ft_strlen(num2) + 1);
+		err = raise_room_bad_y(num1);
 	return (err);
 }
 
@@ -97,7 +82,6 @@ t_err		*parse_room(char *line, t_lmdata *data, int cmd_mode, t_pair *extra)
 	size_t	len;
 	char	**arr;
 	t_node	*rd;
-	int		res;
 	t_err	*err;
 
 	err = NULL;
@@ -110,7 +94,7 @@ t_err		*parse_room(char *line, t_lmdata *data, int cmd_mode, t_pair *extra)
 	}
 	if (arr[0][0] == 'L')
 	{
-		err = new_err(ER_ROOM_BAD_NAME, line, ft_strlen(line) + 1);
+		err = raise_room_bad_name(line);
 		return (err);
 	}
 	if (!ft_isvldint(arr[1]) || !ft_isvldint(arr[2]))
@@ -125,7 +109,6 @@ t_err		*parse_room(char *line, t_lmdata *data, int cmd_mode, t_pair *extra)
 	{
 		rd = new_node(arr[0], ft_atoi(arr[1]), ft_atoi(arr[2]));
 		data->adj[data->adj_cs++] = ft_lstnew(rd, sizeof(t_node));
-		res = 1;
 		if (cmd_mode == 1)
 			extra->fst = data->adj[data->adj_cs - 1];
 		else if (cmd_mode == 2)
@@ -133,22 +116,8 @@ t_err		*parse_room(char *line, t_lmdata *data, int cmd_mode, t_pair *extra)
 		ft_memdel((void**)&rd);
 	}
 	else
-		err = new_err(ER_ROOM_DOUBLE_DEF, arr[0], ft_strlen(arr[0]) + 1);
+		err = raise_room_double_def(arr[0]);
 	ft_free_parr((void***)&arr);
-	return (err);
-}
-
-static t_err	*gen_spaces_err(char *line, char *st1, char *st2)
-{
-	t_err	*err;
-
-	err = NULL;
-	if (ft_strchr(st1, ' '))
-		err = new_err(ER_LINK_SPACES, st1, ft_strlen(st1) + 1);
-	else if (ft_strchr(st2, ' '))
-		err = new_err(ER_LINK_SPACES, st2, ft_strlen(st2) + 1);
-	else
-		err = new_err(ER_LINK_SPACES, line, ft_strlen(line) + 1);
 	return (err);
 }
 
@@ -156,28 +125,26 @@ t_err		*parse_link(char *line, t_lmdata *data)
 {
 	size_t	len;
 	char	**arr;
-	int		res;
 	t_err	*err;
 	char	*tmp;
 
-	res = 0;
 	err = NULL;
 	len = data->adj_as;
 	if ((tmp = ft_strchr(line, '-')) && ft_strchr(tmp + 1, '-'))
 	{
-		err = new_err(ER_LINK_EXTRA_LINK_CHRS, line, ft_strlen(line) + 1);
+		err = raise_link_extra_link_chrs(line);
 		return (err);
 	}
 	arr = ft_strsplit(line, '-');
 	len = ft_arr_len((void**)arr);
 	if (len != 2)
 	{
-		err = new_err(ER_LINK_UNS_DATA, line, ft_strlen(line) + 1);
+		err = raise_link_uns_data(line);
 		return (err);
 	}
 	if (ft_strchr(arr[0], ' ') || ft_strchr(arr[1], ' '))
 	{
-		err = gen_spaces_err(line, arr[0], arr[1]);
+		err = raise_link_spaces(line, arr[0], arr[1]);
 		return (err);
 	}
 	err = add_link(data, arr[0], arr[1]);

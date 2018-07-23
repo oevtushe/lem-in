@@ -6,15 +6,17 @@
 #    By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/12 10:30:58 by oevtushe          #+#    #+#              #
-#    Updated: 2018/07/19 17:01:55 by oevtushe         ###   ########.fr        #
+#    Updated: 2018/07/23 12:11:56 by oevtushe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 LN_NAME				:= lem-in
 
 LN_SRCS_DIR			:= srcs
-LN_OBJS_DIR			:= objs
 LN_DEPS_DIR			:= includes
+LN_ERRS_DIR			:= $(LN_SRCS_DIR)/errors
+LN_OBJS_DIR			:= objs
+LN_OBJS_DIRS		:= $(LN_OBJS_DIR) $(LN_OBJS_DIR)/$(LN_ERRS_DIR:$(LN_SRCS_DIR)/%=%)
 
 FTM_DIR				:= $(LN_SRCS_DIR)/libftmulti
 FT_DIR				:= $(FTM_DIR)/libft
@@ -22,6 +24,32 @@ GNL_DIR				:= $(FTM_DIR)/gnl
 FTP_DIR				:= $(FTM_DIR)/ft_printf
 include 			$(FTM_DIR)/Libftmulti.mk
 include				$(FT_DIR)/Pretty.mk
+
+LN_ERRF				:= error_handler.c				\
+					   err_ants_inv_number.c		\
+					   err_cmd_bad_using.c			\
+					   err_cmd_double_end.c			\
+					   err_cmd_double_start.c		\
+					   err_data_empty.c				\
+					   err_data_no_end.c			\
+					   err_data_no_start.c			\
+					   err_data_no_start_end.c		\
+					   err_link_double.c			\
+					   err_link_extra_chrs.c		\
+					   err_link_not_existing_room.c	\
+					   err_link_self.c				\
+					   err_link_spaces.c			\
+					   err_link_uns_data.c			\
+					   err_room_bad_coord.c			\
+					   err_room_bad_name.c			\
+					   err_room_bad_x.c				\
+					   err_room_bad_y.c				\
+					   err_room_double_def.c		\
+					   err_room_extra_parms.c		\
+					   err_room_no_xy.c				\
+					   err_room_no_y.c
+
+LN_ERRS				:= $(LN_ERRF:%=$(LN_ERRS_DIR)/%)
 
 LN_SRCF				:= main.c					\
 					   ft_arr_len.c				\
@@ -47,19 +75,19 @@ LN_SRCF				:= main.c					\
 					   ft_lstpeeklast.c			\
 					   check_overlapping.c		\
 					   pdecode_paths.c			\
-					   error_handler.c			\
 					   ft_lstpop.c				\
 					   new_err.c				\
 					   ft_newpair.c				\
 					   ft_lstdelsafe.c			\
 					   del_link.c				\
 					   ft_strimplode.c			\
+					   find_in_pinput.c			\
 					   new_data.c
-LN_DEPF				:= lem_in.h
+LN_DEPF				:= lem_in.h lm_errs.h
 
-LN_SRCS				:= $(LN_SRCF:%=$(LN_SRCS_DIR)/%)
+LN_SRCS				:= $(LN_SRCF:%=$(LN_SRCS_DIR)/%) $(LN_ERRS)
 LN_DEPS				:= $(LN_DEPF:%=$(LN_DEPS_DIR)/%)
-LN_OBJS				:= $(LN_SRCF:%.c=$(LN_OBJS_DIR)/%.o)
+LN_OBJS				:= $(LN_SRCF:%.c=$(LN_OBJS_DIR)/%.o) $(LN_ERRS:$(LN_SRCS_DIR)/%.c=$(LN_OBJS_DIR)/%.o)
 
 CC					:= gcc
 CFLAGS				:= $(DEBUG) -Wall -Werror -Wextra -g
@@ -77,9 +105,9 @@ $(LN_OBJS_DIR)/%.o: $(LN_SRCS_DIR)/%.c $(LN_DEPS) $(FTM_NAME)
 	@$(call COMPILE_P,$@)
 	@$(CC) $(CFLAGS) -c $< -o $@ $(IFLAGS)
 
-$(LN_OBJS): |$(LN_OBJS_DIR)
+$(LN_OBJS): |$(LN_OBJS_DIRS)
 
-$(LN_OBJS_DIR):
+$(LN_OBJS_DIRS):
 	@$(call DIR_CREATE_P,$@)
 	@mkdir $@
 

@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:27:51 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/19 17:29:53 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/23 12:06:13 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 
 t_err	*read_ants(int *ants)
 {
-	char	*line;
-	int		st;
-	t_err	*err;
+	char		*line;
+	t_err_code	st;
+	t_err		*err;
 
-	st = ER_DATA_EMPTY;
+	st = ERR_DATA_EMPTY;
 	err = NULL;
 	line = NULL;
 	if (get_next_line(0, &line))
@@ -28,14 +28,14 @@ t_err	*read_ants(int *ants)
 		{
 			*ants = ft_atoi(line);
 			if (*ants)
-				st = 1;
+				st = ERR_NONE;
 		}
 		else
-			err = new_err(ER_ANTS_INV_NUMBER, line, ft_strlen(line) + 1);
+			err = raise_ants_inv_number(line);
 		ft_strdel(&line);
 	}
-	if (!err && st != 1)
-		err = new_err(ER_DATA_EMPTY, NULL, 0);
+	if (!err && st != ERR_NONE)
+		err = raise_data_empty();
 	return (err);
 }
 
@@ -52,18 +52,6 @@ void	print_links(t_list *node)
 void	print(t_list *node)
 {
 	ft_printf("%d\n", *(int*)node->content);
-}
-
-void	choose_one(t_list **paths, t_list *path, int idx)
-{
-	t_list *second;
-
-	second = ft_lstget(*paths, idx);
-	if (ft_lstlen(path) < ft_lstlen(second))
-	{
-		second->content = path->content;
-		second->content_size = path->content_size;
-	}
 }
 
 /*
@@ -125,7 +113,7 @@ void	parse(t_lmdata **data, char **line, t_rdata *rdata)
 		rdata->err = parse_link(*line, *data);
 	}
 	else if (!rdata->err)
-		rdata->err = new_err(ER_PASS_FURTHER, NULL, 0);
+		rdata->err = new_err(ERR_PASS_FURTHER, NULL, 0);
 }
 
 void	realloc_arr(char ***arr, int old_size, int new_size)
@@ -142,84 +130,6 @@ void	realloc_arr(char ***arr, int old_size, int new_size)
 		ft_memdel((void**)arr);
 	}
 	*arr = narr;
-}
-
-int		find_in_pinput(char **input, int size, char *line)
-{
-	int		i;
-	size_t	len;
-
-	i = 0;
-	len = ft_strlen(line);
-	while (i < size && ft_strncmp(input[i], line, len))
-		++i;
-	if (i != size && i != (size - 1))
-		return (i);
-	return (-1);
-}
-
-void	double_room_def_err(char **input, int size, t_err *err)
-{
-	int		i;
-	t_pair	*pair;
-	t_pair	*inner;
-
-	i = find_in_pinput(input, size, (char *)err->extra);
-	if (i != -1)
-	{
-		++i;
-		pair = (t_pair*)ft_memalloc(sizeof(t_pair));
-		pair->fst = err->extra;
-		inner = ft_newpair(&i, sizeof(int), input[i - 1], ft_strlen(input[i - 1]) + 1);
-		pair->scd = inner;
-		err->extra = pair;
-		ft_memdel((void**)&pair);
-	}
-}
-
-void	double_cmd_def_err(char **input, int size, t_err *err)
-{
-	int		i;
-
-	i = -1;
-	if (err->err_code == ER_CMD_DOUBLE_START)
-		i = find_in_pinput(input, size, "##start");
-	else if (err->err_code == ER_CMD_DOUBLE_END)
-		i = find_in_pinput(input, size, "##end");
-	if (i != -1)
-	{
-		++i;
-		err->extra = ft_memdup(&i, sizeof(int));
-	}
-}
-
-void	double_link_err(char **input, int size, t_err *err)
-{
-	int		i;
-	char	*cl;
-	t_pair	*inner;
-
-	cl = ft_strjoin((char *)((t_pair*)err->extra)->fst, "-");
-	ft_strconnect(&cl, (char *)((t_pair*)err->extra)->scd, 1);
-	i = find_in_pinput(input, size, cl);
-	// connect string in second order
-	if (i == -1)
-	{
-		ft_strdel(&cl);
-		cl = ft_strjoin((char *)((t_pair*)err->extra)->scd, "-");
-		ft_strconnect(&cl, (char *)((t_pair*)err->extra)->fst, 1);
-		i = find_in_pinput(input, size, cl);
-	}
-	if (i != -1)
-	{
-		++i;
-		inner = ft_memalloc(sizeof(t_pair));
-		inner->fst = ((t_pair*)err->extra)->fst;
-		inner->scd = ((t_pair*)err->extra)->scd;
-		((t_pair*)err->extra)->fst = ft_memdup(&i, sizeof(int));
-		((t_pair*)err->extra)->scd = inner;
-		ft_memdel((void**)&inner);
-	}
 }
 
 t_lmdata *read_data(void)
@@ -249,7 +159,7 @@ t_lmdata *read_data(void)
 			realloc_arr(&input, arr_size, arr_size * 2);
 			arr_size *= 2;
 		}
-		if (rdata.err && rdata.err->err_code == ER_CMD_INV)
+		if (rdata.err && rdata.err->err_code == ERR_CMD_INV)
 			rdata.err = NULL;
 		// i can't ignore bad commands !
 		input[i++] = line;
@@ -257,20 +167,20 @@ t_lmdata *read_data(void)
 	}
 	if (rdata.err)
 		rdata.err->line = lc;
-	if (rdata.err && rdata.err->err_code == ER_ROOM_DOUBLE_DEF)
-		double_room_def_err(input, i, rdata.err);
-	if (rdata.err && (rdata.err->err_code == ER_CMD_DOUBLE_START || rdata.err->err_code == ER_CMD_DOUBLE_END))
-		double_cmd_def_err(input, i, rdata.err);
-	if (rdata.err && rdata.err->err_code == ER_LINK_DOUBLE)
-		double_link_err(input, i, rdata.err);
+	if (rdata.err && rdata.err->err_code == ERR_ROOM_DOUBLE_DEF)
+		li_room_double_def(rdata.err, input, i);
+	if (rdata.err && (rdata.err->err_code == ERR_CMD_DOUBLE_START || rdata.err->err_code == ERR_CMD_DOUBLE_END))
+		li_cmd_double(rdata.err, input, i);
+	if (rdata.err && rdata.err->err_code == ERR_LINK_DOUBLE)
+		li_link_double(rdata.err, input, i);
 	if (!rdata.err && (!data->extra->fst || !data->extra->scd))
-		rdata.err = new_err(ER_PASS_FURTHER, NULL, 0);
-	if (rdata.err && rdata.err->err_code == ER_PASS_FURTHER && !data->extra->fst && !data->extra->scd)
-		rdata.err = new_err(ER_DATA_NO_START_END, NULL, 0);
-	else if  (rdata.err && rdata.err->err_code == ER_PASS_FURTHER && !data->extra->fst)
-		rdata.err = new_err(ER_DATA_NO_START, NULL, 0);
-	else if (rdata.err && rdata.err->err_code == ER_PASS_FURTHER && !data->extra->scd)
-		rdata.err = new_err(ER_DATA_NO_END, NULL, 0);
+		rdata.err = new_err(ERR_PASS_FURTHER, NULL, 0);
+	if (rdata.err && rdata.err->err_code == ERR_PASS_FURTHER && !data->extra->fst && !data->extra->scd)
+		rdata.err = raise_data_no_start_end();
+	else if  (rdata.err && rdata.err->err_code == ERR_PASS_FURTHER && !data->extra->fst)
+		rdata.err = raise_data_no_start();
+	else if (rdata.err && rdata.err->err_code == ERR_PASS_FURTHER && !data->extra->scd)
+		rdata.err = raise_data_no_end();
 	if (rdata.err)
 	{
 		error_handler(rdata.err);
