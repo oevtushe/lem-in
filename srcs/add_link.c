@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/05 09:39:57 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/20 17:28:44 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/24 10:45:10 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ t_err			*add_link(t_lmdata *data, char *fst, char *scd)
 	ec = ERR_LINK_NOT_EXISTING_ROOM;
 	if ((i = get_node_idx(data, fst)) >= 0 && (j = get_node_idx(data, scd)) >= 0)
 	{
-		if (ft_lst_get_node_idx(data->adj[i], data->adj[j], check) == -1 &&
-				ft_lst_get_node_idx(data->adj[j], data->adj[i], check) == -1)
+		if (ft_lstgetidx(data->adj[i], data->adj[j], check) == -1 &&
+				ft_lstgetidx(data->adj[j], data->adj[i], check) == -1)
 		{
 			clone = clone_node(data->adj[j]);
 			ft_lstappend(&data->adj[i], clone);

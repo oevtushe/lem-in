@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:27:51 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/23 12:06:13 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/24 11:04:38 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void	parse(t_lmdata **data, char **line, t_rdata *rdata)
 		rdata->err = parse_command(*line, &rdata->cmd_mode, (*data)->extra);
 	else if ((*line)[0] == '#')
 		return ;
-	else if (rdata->data_type == 0 && !(arr[0] && ft_strchr(arr[0], '-')) && \
+	else if (rdata->data_type == 0 && !(arr[0] && ft_strchr(arr[0], '-')) &&
 			!(rdata->err = parse_room(*line, *data, rdata->cmd_mode, (*data)->extra)))
 		rdata->cmd_mode = 0;
 	else if (!rdata->err && (*data)->extra->fst && (*data)->extra->scd)
@@ -132,13 +132,12 @@ void	realloc_arr(char ***arr, int old_size, int new_size)
 	*arr = narr;
 }
 
-t_lmdata *read_data(void)
+t_lmdata *read_data(int errors)
 {
 	t_lmdata	*data;
 	char 		*line;
 	t_rdata		rdata;
 	int			lc;
-	char		**input;
 	int			arr_size;
 	int			i;
 
@@ -146,33 +145,35 @@ t_lmdata *read_data(void)
 	arr_size = 1;
 	i = 0;
 	data = NULL;
-	input = NULL;
-	realloc_arr(&input, 0, arr_size);
 	init_data(&data, &line, &rdata);
+	realloc_arr(&data->input, 0, arr_size);
 	rdata.err = read_ants(&data->ants);
-	input[i++] = ft_itoa(data->ants);
+	data->input[i++] = ft_itoa(data->ants);
 	while (!rdata.err && get_next_line(0, &line))
 	{
 		parse(&data, &line, &rdata);
 		if (i >= arr_size)
 		{
-			realloc_arr(&input, arr_size, arr_size * 2);
+			realloc_arr(&data->input, arr_size, arr_size * 2);
 			arr_size *= 2;
 		}
 		if (rdata.err && rdata.err->err_code == ERR_CMD_INV)
+		{
 			rdata.err = NULL;
-		// i can't ignore bad commands !
-		input[i++] = line;
+			ft_strdel(&line);
+			// after writes null
+		}
+		data->input[i++] = line;
 		++lc;
 	}
 	if (rdata.err)
 		rdata.err->line = lc;
 	if (rdata.err && rdata.err->err_code == ERR_ROOM_DOUBLE_DEF)
-		li_room_double_def(rdata.err, input, i);
+		li_room_double_def(rdata.err, data->input, i);
 	if (rdata.err && (rdata.err->err_code == ERR_CMD_DOUBLE_START || rdata.err->err_code == ERR_CMD_DOUBLE_END))
-		li_cmd_double(rdata.err, input, i);
+		li_cmd_double(rdata.err, data->input, i);
 	if (rdata.err && rdata.err->err_code == ERR_LINK_DOUBLE)
-		li_link_double(rdata.err, input, i);
+		li_link_double(rdata.err, data->input, i);
 	if (!rdata.err && (!data->extra->fst || !data->extra->scd))
 		rdata.err = new_err(ERR_PASS_FURTHER, NULL, 0);
 	if (rdata.err && rdata.err->err_code == ERR_PASS_FURTHER && !data->extra->fst && !data->extra->scd)
@@ -181,26 +182,50 @@ t_lmdata *read_data(void)
 		rdata.err = raise_data_no_start();
 	else if (rdata.err && rdata.err->err_code == ERR_PASS_FURTHER && !data->extra->scd)
 		rdata.err = raise_data_no_end();
+	data->inp_size = i;
 	if (rdata.err)
 	{
-		error_handler(rdata.err);
+		error_handler(rdata.err, errors);
 		return (NULL);
 	}
 	return (data);
 }
 
-int		main(void)
+int		main(int argc, char **argv)
 {
+	int			i;
+	int			errors;
 	t_list		*paths;
+	t_err		*err;
 	t_lmdata	*data;
 
-	data = read_data();
+	i = 0;
+	err = NULL;
+	errors = 0;
+	if (argc == 2)
+		if (ft_strequ(argv[1], "-e"))
+			errors = 1;
+	data = read_data(errors);
 	if (data)
 	{
 		if ((paths = get_paths(data)))
 			pdecode_paths(data, paths);
 		else
-			ft_printf("Error: no path between start and end\n");
+		{
+			err = raise_data_no_path();
+			if (err)
+			{
+				error_handler(err, errors);
+				return (0);
+			}
+		}
+		while (i < data->inp_size)
+		{
+			if (data->input[i])
+				ft_printf("%s\n", data->input[i]);
+			++i;
+		}
+		ft_putchar('\n');
 	}
 	return (0);
 }

@@ -1,24 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_parr.c                                     :+:      :+:    :+:   */
+/*   err_data_no_path.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/13 11:13:30 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/06/13 11:16:42 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/07/24 10:52:04 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/07/24 11:06:37 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem_in.h"
+#include "lm_errs.h"
 
-void	ft_free_parr(void ***arr)
+t_err	*raise_data_no_path(void)
 {
-	size_t i;
+	t_err	*err;
 
-	i = 0;
-	while ((*arr)[i])
-		ft_memdel((void**)&(*arr)[i++]);
-	ft_memdel((void**)arr);
-	*arr = NULL;
+	err = new_err(ERR_DATA_NO_PATH, NULL, 0);
+	return (err);
+}
+
+char	*hlr_data_no_path(void **extra, int line)
+{
+	size_t	ln;
+	char	*err_msg;
+
+	extra = NULL;
+	line = 0;
+	err_msg = ft_format("%s%sError%s: no path between "
+			"%sstart%s and %send%s\n", &ln, UNDERLINE, CYAN, RESET, 
+			GREEN, RESET, GREEN, RESET);
+	return (err_msg);
 }

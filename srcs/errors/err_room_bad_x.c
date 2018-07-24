@@ -6,11 +6,11 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/20 18:46:28 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/23 11:41:11 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/23 16:47:36 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem_in.h"
+#include "lm_errs.h"
 
 t_err	*raise_room_bad_x(char *num1)
 {

@@ -6,11 +6,11 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/20 18:46:28 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/20 18:46:28 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/24 11:07:29 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem_in.h"
+#include "lm_errs.h"
 
 /* late init */
 void	li_room_double_def(t_err *err, char **input, int size)
@@ -49,7 +49,7 @@ char	*hlr_room_double_def(void **extra, int line)
 	p1 = (t_pair *)*extra;
 	p2 = (t_pair *)p1->scd;
 	err_msg = ft_format("%s%sError%s:%s%d%s: room with name '%s%s%s' "
-			"have already been defined as '%s%s%s' in line: %s%d%s\n",
+			"has already been defined as '%s%s%s' in line: %s%d%s\n",
 			&ln, UNDERLINE, CYAN, RESET, BOLD, line, RESET, RED,
 			(char*)p1->fst, RESET, RED,
 			(char*)p2->scd, RESET, BOLD,

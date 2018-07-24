@@ -6,11 +6,11 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/14 12:26:52 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/23 11:29:23 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/24 10:58:07 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem_in.h"
+#include "lm_errs.h"
 
 t_err_dsp	*new_dsp_entry(int err_code, char *(*err_handler)(void **, int))
 {
@@ -53,10 +53,12 @@ t_err_dsp	**init_dsp(void)
 	dsp[20] = new_dsp_entry(ERR_DATA_NO_END, hlr_data_no_end);
 	dsp[21] = new_dsp_entry(ERR_DATA_NO_START_END, hlr_data_no_start_end);
 	dsp[22] = new_dsp_entry(ERR_ANTS_INV_NUMBER, hlr_ants_inv_number);
+	dsp[23] = new_dsp_entry(ERR_ROOM_SPACES, hlr_room_spaces);
+	dsp[24] = new_dsp_entry(ERR_DATA_NO_PATH, hlr_data_no_path);
 	return (dsp);
 }
 
-void	error_handler(t_err *err)
+void	error_handler(t_err *err, int errors)
 {
 	int			i;
 	char		*err_msg;
@@ -74,6 +76,11 @@ void	error_handler(t_err *err)
 		}
 		++i;
 	}
-	if (err_msg)
+	if (errors && err_msg)
+	{
 		ft_putstr_fd(err_msg, 2);
+		ft_strdel(&err_msg);
+	}
+	else if (!errors && err_msg)
+		ft_printf("ERROR\n");
 }

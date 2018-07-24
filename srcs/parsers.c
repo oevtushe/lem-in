@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/10 15:57:56 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/23 12:11:10 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/24 10:46:59 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,15 @@ t_err		*parse_room(char *line, t_lmdata *data, int cmd_mode, t_pair *extra)
 
 	err = NULL;
 	arr = ft_strsplit(line, ' ');
-	len = ft_arr_len((void**)arr);
+	len = ft_parrlen_zt((void**)arr);
 	if (len != 3)
 	{
 		err = gen_room_bf_err(line, arr, len);
+		return (err);
+	}
+	if (ft_strchcnt(line, ' ') > 2)
+	{
+		err = raise_room_spaces(line);
 		return (err);
 	}
 	if (arr[0][0] == 'L')
@@ -99,7 +104,6 @@ t_err		*parse_room(char *line, t_lmdata *data, int cmd_mode, t_pair *extra)
 	}
 	if (!ft_isvldint(arr[1]) || !ft_isvldint(arr[2]))
 	{
-		// Define which coordinate is bad and why
 		err = gen_bad_coord_err(arr[1], arr[2]);
 		return (err);
 	}
@@ -117,7 +121,7 @@ t_err		*parse_room(char *line, t_lmdata *data, int cmd_mode, t_pair *extra)
 	}
 	else
 		err = raise_room_double_def(arr[0]);
-	ft_free_parr((void***)&arr);
+	ft_parrdel_zt((void***)&arr);
 	return (err);
 }
 
@@ -136,7 +140,7 @@ t_err		*parse_link(char *line, t_lmdata *data)
 		return (err);
 	}
 	arr = ft_strsplit(line, '-');
-	len = ft_arr_len((void**)arr);
+	len = ft_parrlen_zt((void**)arr);
 	if (len != 2)
 	{
 		err = raise_link_uns_data(line);
@@ -148,6 +152,6 @@ t_err		*parse_link(char *line, t_lmdata *data)
 		return (err);
 	}
 	err = add_link(data, arr[0], arr[1]);
-	ft_free_parr((void***)&arr);
+	ft_parrdel_zt((void***)&arr);
 	return (err);
 }

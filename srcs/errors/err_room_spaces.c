@@ -1,33 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   err_data_empty.c                                   :+:      :+:    :+:   */
+/*   err_room_spaces.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/20 18:46:28 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/23 16:47:13 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/07/23 16:44:14 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/07/23 17:18:46 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lm_errs.h"
 
-t_err	*raise_data_empty(void)
+t_err	*raise_room_spaces(char *line)
 {
 	t_err *err;
 
-	err = new_err(ERR_DATA_EMPTY, NULL, 0);
+	err = new_err(ERR_ROOM_SPACES, line, ft_strlen(line) + 1);
 	return (err);
 }
 
-char *hlr_data_empty(void **extra, int line)
+char	*hlr_room_spaces(void **extra, int line)
 {
 	size_t	ln;
 	char	*err_msg;
 
-	line = 0;
-	extra = NULL;
-	err_msg = ft_format("%s%sError%s: No input data\n", 
-			&ln, UNDERLINE, CYAN, RESET);
+	err_msg = ft_format("%s%sError%s:%s%d%s: extra spaces were found in line '%s%s%s'\n",
+			&ln, UNDERLINE, CYAN, RESET, BOLD, line, RESET, RED, (char *)*extra, RESET);
+	ft_strdel((char **)extra);
 	return (err_msg);
 }

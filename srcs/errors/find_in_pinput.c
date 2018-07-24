@@ -1,43 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstpop.c                                        :+:      :+:    :+:   */
+/*   find_in_pinput.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/17 11:06:24 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/17 11:37:53 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/07/23 12:06:39 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/07/23 17:41:39 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-void	*ft_lstpop(t_list **lst)
+int		find_in_pinput(char **input, int size, char *line)
 {
-	t_list	*last;
-	t_list	*runner;
-	void	*data;
+	int		i;
+	size_t	len;
 
-	runner = *lst;
-	data = NULL;
-	if (lst && *lst)
+	i = 0;
+	len = ft_strlen(line);
+	while (i < size)
 	{
-		if ((*lst)->next)
-		{
-			while (runner->next->next)
-				runner = runner->next;
-			last = runner->next;
-			data = last->content;
-			ft_memdel((void**)&last);
-			runner->next = NULL;
-		}
-		else
-		{
-			last = *lst;
-			data = last->content;
-			ft_memdel((void**)&last);
-			*lst = NULL;
-		}
+		if (input[i])
+			if (!ft_strncmp(input[i], line, len))
+				break ;
+		++i;
 	}
-	return (data);
+	if (i != size && i != (size - 1))
+		return (i);
+	return (-1);
 }

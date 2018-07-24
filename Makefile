@@ -6,7 +6,7 @@
 #    By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/12 10:30:58 by oevtushe          #+#    #+#              #
-#    Updated: 2018/07/23 12:11:56 by oevtushe         ###   ########.fr        #
+#    Updated: 2018/07/24 10:57:30 by oevtushe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ LN_ERRF				:= error_handler.c				\
 					   err_data_no_end.c			\
 					   err_data_no_start.c			\
 					   err_data_no_start_end.c		\
+					   err_data_no_path.c			\
 					   err_link_double.c			\
 					   err_link_extra_chrs.c		\
 					   err_link_not_existing_room.c	\
@@ -47,13 +48,14 @@ LN_ERRF				:= error_handler.c				\
 					   err_room_double_def.c		\
 					   err_room_extra_parms.c		\
 					   err_room_no_xy.c				\
+					   err_room_spaces.c			\
+					   new_err.c					\
+					   find_in_pinput.c				\
 					   err_room_no_y.c
 
 LN_ERRS				:= $(LN_ERRF:%=$(LN_ERRS_DIR)/%)
 
 LN_SRCF				:= main.c					\
-					   ft_arr_len.c				\
-					   ft_free_parr.c			\
 					   ft_realloc.c				\
 					   new_node.c				\
 					   print_rooms.c			\
@@ -62,9 +64,6 @@ LN_SRCF				:= main.c					\
 					   get_node_idx.c			\
 					   new_room_node.c			\
 					   add_link.c				\
-					   ft_lst_get_node_idx.c	\
-					   ft_arrcontains.c			\
-					   ft_lstdequeue.c			\
 					   clone_node.c				\
 					   print_path.c				\
 					   save_path.c				\
@@ -72,16 +71,9 @@ LN_SRCF				:= main.c					\
 					   wash_up_map.c			\
 					   parsers.c				\
 					   add_path_to_blacklist.c	\
-					   ft_lstpeeklast.c			\
 					   check_overlapping.c		\
 					   pdecode_paths.c			\
-					   ft_lstpop.c				\
-					   new_err.c				\
-					   ft_newpair.c				\
-					   ft_lstdelsafe.c			\
 					   del_link.c				\
-					   ft_strimplode.c			\
-					   find_in_pinput.c			\
 					   new_data.c
 LN_DEPF				:= lem_in.h lm_errs.h
 

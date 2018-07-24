@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/10 15:54:47 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/17 11:00:25 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/24 10:45:32 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void		bfs(t_lmdata *data, t_list *black_list)
 		while (v)
 		{
 			idx_v = get_node_idx(data, ((t_node*)v->content)->name);
-			if (!((t_node*)v->content)->visited && ft_lst_get_node_idx(black_list, &idx_v, check) == -1)
+			if (!((t_node*)v->content)->visited && ft_lstgetidx(black_list, &idx_v, check) == -1)
 			{
 				((t_node*)v->content)->d = u->d + 1;
 				((t_node*)v->content)->p = idx_u;
