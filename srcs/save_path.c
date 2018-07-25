@@ -6,11 +6,15 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/10 15:15:51 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/17 16:55:56 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/25 12:44:26 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
+
+/*
+** Saves path as list of rooms
+*/
 
 void		save_path(t_lmdata *data, t_list **path)
 {
@@ -30,7 +34,7 @@ void		save_path(t_lmdata *data, t_list **path)
 	idx_cur = idx_end;
 	while (idx_cur != -1)
 	{
-		n = ft_lstnew(&idx_cur, sizeof(int));
+		n = clone_node(data->adj[idx_cur]);
 		ft_lstadd(path, n);
 		idx_cur = ((t_node*)data->adj[idx_cur]->content)->p;
 	}

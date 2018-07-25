@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:31:45 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/24 10:44:06 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/25 11:57:02 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ typedef	struct	s_node
 	int		p;
 	int		d;
 	int		visited;
+	int		ant;
+	int		fresh;
 }				t_node;
 
 typedef struct	s_source
@@ -51,7 +53,7 @@ typedef struct	s_source
 	t_list *nodes;
 }				t_source;
 
-void		pdecode_paths(t_lmdata *data, t_list *paths);
+void		pdecode_paths(t_list *paths);
 int			check_overlapping(t_list *paths, t_list *path);
 //int			backtracking(t_lmdata *data, t_pair *paths, int root);
 t_err		*add_link(t_lmdata *data, char *fst, char *scd);

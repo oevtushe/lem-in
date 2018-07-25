@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:27:51 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/24 11:04:38 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/25 17:17:36 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,9 @@ t_list	*get_paths(t_lmdata *data)
 	t_list	*path;
 	t_list	*paths;
 	t_list	*black_list;
+	int		dl;
 
+	dl  = 0;
 	path = NULL;
 	paths = NULL;
 	black_list = NULL;
@@ -71,12 +73,13 @@ t_list	*get_paths(t_lmdata *data)
 	while (((t_node*)((t_list*)data->extra->scd)->content)->p != -1)
 	{
 		save_path(data, &path);
-		ft_lstadd(&paths, ft_lstnew(path, sizeof(t_list)));
+		ft_lstappend(&paths, ft_lstnew(path, sizeof(t_list)));
 		add_path_to_blacklist(&black_list, path);
 		// In case start-end + some other paths
 		if (((t_node*)((t_list*)data->extra->scd)->content)->p == \
 				get_node_idx(data, ((t_node*)((t_list*)data->extra->fst)->content)->name))
 		{
+			dl = 1;
 			del_link(data, ((t_node*)((t_list*)data->extra->fst)->content)->name,
 					((t_node*)((t_list*)data->extra->scd)->content)->name);
 		}
@@ -84,6 +87,10 @@ t_list	*get_paths(t_lmdata *data)
 		bfs(data, black_list);
 		path = NULL;
 	}
+	// restore deleted link
+	if (dl)
+		add_link(data, ((t_node*)((t_list*)data->extra->fst)->content)->name,
+				((t_node*)((t_list*)data->extra->scd)->content)->name);
 	return (paths);
 }
 
@@ -191,6 +198,109 @@ t_lmdata *read_data(int errors)
 	return (data);
 }
 
+t_list	*get_last_room_with_ant(t_list *path)
+{
+	while (path)
+	{
+		if (((t_node *)path->content)->ant != -1)
+			break ;
+		path = path->next;
+	}
+	return (path);
+}
+
+int		move_ants(t_lmdata *data, t_list *paths, int *al)
+{
+	int		new;
+	int		old;
+	t_list	*path;
+	int		sm;
+	int		spl;
+
+	sm = 0;
+	spl = ft_lstlen((t_list *)paths->content);
+	while (paths)
+	{
+		new = 0;
+		old = 0;
+		path = (t_list *)paths->content;
+		if (*al < data->ants && (int)ft_lstlen(path) - spl <= data->ants - *al)
+		{
+			sm = 1;
+			new = ++*al;
+			path = path->next;
+		}
+		while (path)
+		{
+
+			old = ((t_node *)path->content)->ant;
+			((t_node *)path->content)->ant = 0;
+			if (new)
+			{
+				sm = 1;
+				((t_node *)path->content)->ant = new;
+				((t_node *)path->content)->fresh = 1;
+			}
+			new = old;
+			path = path->next;
+		}
+		paths = paths->next;
+	}
+	return (sm);
+}
+
+void	print_ants(t_list *paths)
+{
+	int		c;
+	int		spc;
+	t_list	*runner;
+	t_list	*path;
+
+	c = 0;
+	spc = 0;
+	runner = paths;
+	while (1)
+	{
+		ft_lstcorder((t_list **)&runner->content);
+		path = (t_list *)runner->content;
+		while (path)
+		{
+			if (((t_node *)path->content)->ant && ((t_node *)path->content)->fresh)
+			{
+				if (spc)
+					ft_putchar(' ');
+				ft_printf("L%d-%s", ((t_node *)path->content)->ant, ((t_node *)path->content)->name);
+				((t_node *)path->content)->fresh = 0;
+				c = 1;
+				spc = 1;
+				break ;
+			}
+			path = path->next;
+		}
+		ft_lstcorder((t_list **)&runner->content);
+		runner = runner->next;
+		if(!runner && c)
+		{
+			c = 0;
+			runner = paths;
+		}
+		else if (!runner && !c)
+		{
+			ft_putchar('\n');
+			break ;
+		}
+	}
+}
+
+void	make_them_run(t_lmdata *data, t_list *paths)
+{
+	int		al;
+
+	al = 0;
+	while (move_ants(data, paths, &al))
+		print_ants(paths);
+}
+
 int		main(int argc, char **argv)
 {
 	int			i;
@@ -209,7 +319,17 @@ int		main(int argc, char **argv)
 	if (data)
 	{
 		if ((paths = get_paths(data)))
-			pdecode_paths(data, paths);
+		{
+			while (i < data->inp_size)
+			{
+				if (data->input[i])
+					ft_printf("%s\n", data->input[i]);
+				++i;
+			}
+			ft_putchar('\n');
+			pdecode_paths(paths);
+			make_them_run(data, paths);
+		}
 		else
 		{
 			err = raise_data_no_path();
@@ -219,13 +339,6 @@ int		main(int argc, char **argv)
 				return (0);
 			}
 		}
-		while (i < data->inp_size)
-		{
-			if (data->input[i])
-				ft_printf("%s\n", data->input[i]);
-			++i;
-		}
-		ft_putchar('\n');
 	}
 	return (0);
 }
