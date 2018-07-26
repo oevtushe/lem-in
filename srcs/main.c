@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:27:51 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/25 17:17:36 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/26 11:40:41 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,6 +292,41 @@ void	print_ants(t_list *paths)
 	}
 }
 
+t_node	*dup_room(t_node *room)
+{
+	t_node	*new;
+
+	new = (t_node *)ft_memalloc(sizeof(t_node));
+	if (new)
+	{
+		new->x = room->x;
+		new->y = room->y;
+		new->name = ft_strdup(room->name);
+		new->p = room->p;
+		new->d = room->d;
+		new->visited = room->visited;
+		new->ant = room->ant;
+		new->fresh = room->fresh;
+	}
+	return (new);
+}
+
+void	full_copy(t_list *paths)
+{
+	t_list *path;
+
+	while (paths)
+	{
+		path = (t_list *)paths->content;
+		while (path)
+		{
+			path->content = dup_room((t_node *)path->content);
+			path = path->next;
+		}
+		paths = paths->next;
+	}
+}
+
 void	make_them_run(t_lmdata *data, t_list *paths)
 {
 	int		al;
@@ -327,6 +362,7 @@ int		main(int argc, char **argv)
 				++i;
 			}
 			ft_putchar('\n');
+			full_copy(paths);
 			pdecode_paths(paths);
 			make_them_run(data, paths);
 		}
