@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/10 15:57:56 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/24 10:46:59 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/31 19:06:47 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static t_err	*gen_bad_coord_err(char *num1, char *num2)
 	else if (!ft_isvldint(num1))
 		err = raise_room_bad_x(num1);
 	else if (!ft_isvldint(num2))
-		err = raise_room_bad_y(num1);
+		err = raise_room_bad_y(num2);
 	return (err);
 }
 

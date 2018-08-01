@@ -6,7 +6,7 @@
 #    By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/12 10:30:58 by oevtushe          #+#    #+#              #
-#    Updated: 2018/07/24 10:57:30 by oevtushe         ###   ########.fr        #
+#    Updated: 2018/07/31 18:36:24 by oevtushe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ include 			$(FTM_DIR)/Libftmulti.mk
 include				$(FT_DIR)/Pretty.mk
 
 LN_ERRF				:= error_handler.c				\
+					   err_empty_line.c				\
 					   err_ants_inv_number.c		\
 					   err_cmd_bad_using.c			\
 					   err_cmd_double_end.c			\
@@ -60,7 +61,7 @@ LN_SRCF				:= main.c					\
 					   new_node.c				\
 					   print_rooms.c			\
 					   del_node.c				\
-					   realloc_adj.c			\
+					   reallocators.c			\
 					   get_node_idx.c			\
 					   new_room_node.c			\
 					   add_link.c				\
@@ -74,6 +75,15 @@ LN_SRCF				:= main.c					\
 					   check_overlapping.c		\
 					   pdecode_paths.c			\
 					   del_link.c				\
+					   backtracking.c			\
+					   add_node_to_blacklist.c	\
+					   ft_qsarr.c				\
+					   ft_lsttoarr.c			\
+					   ft_lstnew_cc.c			\
+					   ft_arrtolst.c			\
+					   del_utils.c				\
+					   ft_freepa.c				\
+					   ft_freepa_sd.c			\
 					   new_data.c
 LN_DEPF				:= lem_in.h lm_errs.h
 

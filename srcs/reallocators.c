@@ -1,33 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc.c                                       :+:      :+:    :+:   */
+/*   reallocators.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/13 15:48:28 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/31 15:17:05 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/07/31 16:17:56 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/07/31 16:24:01 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-/*
-** Function reallocates memory
-**
-** Sizes should be given in bytes
-** If current size is equall or bigger than new one, nothing will be done
-*/
-
-void	ft_realloc(void **mem, size_t old_size, size_t new_size)
+void		realloc_adj(t_lmdata *data)
 {
-	void	*new_mem;
+	size_t old_len;
+	size_t new_len;
 
-	if (old_size < new_size)
-	{
-		new_mem = ft_memalloc(new_size);
-		ft_memcpy(new_mem, *mem, old_size);
-		ft_memdel(mem);
-		*mem = new_mem;
-	}
+	old_len = data->adj_as * sizeof(void *);
+	data->adj_as += 10;
+	new_len = data->adj_as * sizeof(void *);
+	ft_realloc((void**)&data->adj, old_len, new_len);
+}
+
+void		realloc_input(char ***input, int *size)
+{
+	int new_len;
+
+	new_len = *size + 10;
+	ft_realloc((void **)input,
+			*size * sizeof(void *), new_len * sizeof(void *));
+	*size = new_len;
 }

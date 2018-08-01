@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:31:45 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/25 11:57:02 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/01 09:57:40 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@ typedef struct	s_rdata
 	t_err	*err;
 }				t_rdata;
 
+typedef struct	s_po
+{
+	int errors;
+	int bt;
+}				t_po;
+
 typedef struct	s_lmdata
 {
 	int		ants;
@@ -34,6 +40,12 @@ typedef struct	s_lmdata
 	char	**input;
 	int		inp_size;
 }				t_lmdata;
+
+typedef struct	s_point
+{
+	int x;
+	int y;
+}				t_point;
 
 typedef	struct	s_node
 {
@@ -54,12 +66,13 @@ typedef struct	s_source
 }				t_source;
 
 void		pdecode_paths(t_list *paths);
-int			check_overlapping(t_list *paths, t_list *path);
-//int			backtracking(t_lmdata *data, t_pair *paths, int root);
+char		*check_overlapping(t_lmdata *data, t_list *paths, t_list *path);
+char		*backtracking(t_lmdata *data, t_pair *paths, char *root);
 t_err		*add_link(t_lmdata *data, char *fst, char *scd);
 t_list		*clone_node(t_list *room);
 int			get_node_idx(t_lmdata *data, char *name);
 void		check_adj(t_lmdata *data);
+void		realloc_input(char ***input, int *size);
 void		realloc_adj(t_lmdata *data);
 void		ft_realloc(void **mem, size_t old_size, size_t new_size);
 t_lmdata	*new_data(int mds);
@@ -69,10 +82,18 @@ t_list		*new_room_node(char *name, int x, int y);
 void		free_node(t_node **node);
 void		print_path(t_lmdata *data);
 void		save_path(t_lmdata *data, t_list **path);
-void		bfs(t_lmdata *data, t_list *black_list);
+void		bfs(t_lmdata *data, t_list *start, t_list *black_list, int (*check)(t_list *, void *));
 void		wash_up_map(t_lmdata *data);
 void		add_path_to_blacklist(t_list **black_list, t_list *path);
+void		add_node_to_blacklist(t_list **black_list, char *o);
 void		del_link(t_lmdata *data, char *n1, char *n2);
+void		ft_qsarr(void **arr, int start, int end, int (*cmp)(void *, void *));
+void		**ft_lsttoarr(t_list *lst);
+t_list		*ft_arrtolst(void **arr, int size);
+t_list		*ft_lstnew_cc(void *content, size_t content_size);
+void		ft_freepa_sd(void ***arr, int size);
+void		ft_freepa(void ***arr, int size, void (*del)(void *content));
+void		del_empty_node(void *content, size_t content_size);
 
 t_err		*parse_link(char *line, t_lmdata *data);
 t_err		*parse_room(char *line, t_lmdata *data, int cmd_mode, t_pair *extra);

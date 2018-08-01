@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/14 12:26:52 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/24 10:58:07 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/31 12:44:42 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ t_err_dsp	**init_dsp(void)
 	dsp[22] = new_dsp_entry(ERR_ANTS_INV_NUMBER, hlr_ants_inv_number);
 	dsp[23] = new_dsp_entry(ERR_ROOM_SPACES, hlr_room_spaces);
 	dsp[24] = new_dsp_entry(ERR_DATA_NO_PATH, hlr_data_no_path);
+	dsp[25] = new_dsp_entry(ERR_EMPTY_LINE, hlr_empty_line);
 	return (dsp);
 }
 

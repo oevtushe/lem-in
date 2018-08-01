@@ -1,33 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc.c                                       :+:      :+:    :+:   */
+/*   ft_arrtolst.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/13 15:48:28 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/31 15:17:05 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/07/30 15:26:38 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/07/30 16:16:33 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
 /*
-** Function reallocates memory
-**
-** Sizes should be given in bytes
-** If current size is equall or bigger than new one, nothing will be done
+** Function converts array of pointers to list
 */
 
-void	ft_realloc(void **mem, size_t old_size, size_t new_size)
+t_list *ft_arrtolst(void **arr, int size)
 {
-	void	*new_mem;
+	int		i;
+	t_list	*begin;
+	t_list	*last;
 
-	if (old_size < new_size)
+	i = 0;
+	begin = NULL;
+	last = NULL;
+	if (size && arr)
 	{
-		new_mem = ft_memalloc(new_size);
-		ft_memcpy(new_mem, *mem, old_size);
-		ft_memdel(mem);
-		*mem = new_mem;
+		last = ft_lstnew_cc(arr[i++], sizeof(t_list));
+		begin = last;
+		while (i < size)
+		{
+			last->next = ft_lstnew_cc(arr[i], sizeof(t_list));
+			last = last->next;
+			++i;
+		}
 	}
+	return (begin);
 }

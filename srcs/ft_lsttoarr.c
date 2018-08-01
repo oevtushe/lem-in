@@ -1,33 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc.c                                       :+:      :+:    :+:   */
+/*   ft_lsttoarr.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/13 15:48:28 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/31 15:17:05 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/07/30 13:49:40 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/07/30 15:14:36 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
 /*
-** Function reallocates memory
+** Function creates an array of pointers from data in list content
 **
-** Sizes should be given in bytes
-** If current size is equall or bigger than new one, nothing will be done
+** Notice: all content in list nodes has to have single type.
+** The content won't be cloned.
 */
 
-void	ft_realloc(void **mem, size_t old_size, size_t new_size)
+void	**ft_lsttoarr(t_list *lst)
 {
-	void	*new_mem;
+	int		idx;
+	int		len;
+	void	**arr;
 
-	if (old_size < new_size)
+	idx = 0;
+	arr = NULL;
+	if (lst)
 	{
-		new_mem = ft_memalloc(new_size);
-		ft_memcpy(new_mem, *mem, old_size);
-		ft_memdel(mem);
-		*mem = new_mem;
+		len = ft_lstlen(lst);
+		arr = ft_memalloc(len * sizeof(void *));
+		if (arr)
+		{
+			while (lst)
+			{
+				arr[idx++] = lst->content;
+				lst = lst->next;
+			}
+		}
 	}
+	return (arr);
 }

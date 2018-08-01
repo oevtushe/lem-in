@@ -1,33 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc.c                                       :+:      :+:    :+:   */
+/*   ft_lstnew_cc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/13 15:48:28 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/31 15:17:05 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/07/30 15:45:08 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/07/30 16:06:14 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
 /*
-** Function reallocates memory
+** Function creates new node with specified content and
+** content_size, but content won't be copied, it will
+** point at passed one
 **
-** Sizes should be given in bytes
-** If current size is equall or bigger than new one, nothing will be done
+** Suffix 'cc' means catch content
 */
 
-void	ft_realloc(void **mem, size_t old_size, size_t new_size)
+t_list	*ft_lstnew_cc(void *content, size_t content_size)
 {
-	void	*new_mem;
+	t_list *node;
 
-	if (old_size < new_size)
+	node = (t_list *)ft_memalloc(sizeof(t_list));
+	if (node)
 	{
-		new_mem = ft_memalloc(new_size);
-		ft_memcpy(new_mem, *mem, old_size);
-		ft_memdel(mem);
-		*mem = new_mem;
+		node->content = content;
+		node->content_size = content_size;
 	}
+	return (node);
 }

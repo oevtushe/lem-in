@@ -1,33 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc.c                                       :+:      :+:    :+:   */
+/*   ft_freepa.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/13 15:48:28 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/31 15:17:05 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/07/31 18:31:21 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/07/31 18:49:21 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
 /*
-** Function reallocates memory
-**
-** Sizes should be given in bytes
-** If current size is equall or bigger than new one, nothing will be done
+** Function deletes array of pointers with specified size.
+** The content of the array may have any type
 */
 
-void	ft_realloc(void **mem, size_t old_size, size_t new_size)
+void	ft_freepa(void ***arr, int size, void (*del)(void *content))
 {
-	void	*new_mem;
+	int i;
 
-	if (old_size < new_size)
+	i = -1;
+	if (arr && *arr)
 	{
-		new_mem = ft_memalloc(new_size);
-		ft_memcpy(new_mem, *mem, old_size);
-		ft_memdel(mem);
-		*mem = new_mem;
+		while (++i < size)
+			if ((*arr)[i])
+				del((*arr)[i]);
+		ft_memdel((void **)arr);
 	}
 }

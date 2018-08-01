@@ -1,33 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc.c                                       :+:      :+:    :+:   */
+/*   err_empty_line.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/13 15:48:28 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/31 15:17:05 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/07/31 12:37:21 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/07/31 18:10:47 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem_in.h"
+#include "lm_errs.h"
 
-/*
-** Function reallocates memory
-**
-** Sizes should be given in bytes
-** If current size is equall or bigger than new one, nothing will be done
-*/
-
-void	ft_realloc(void **mem, size_t old_size, size_t new_size)
+t_err	*raise_empty_line(void)
 {
-	void	*new_mem;
+	t_err *err;
 
-	if (old_size < new_size)
-	{
-		new_mem = ft_memalloc(new_size);
-		ft_memcpy(new_mem, *mem, old_size);
-		ft_memdel(mem);
-		*mem = new_mem;
-	}
+	err = new_err(ERR_EMPTY_LINE, NULL, 0);
+	return (err);
+}
+
+char	*hlr_empty_line(void **extra, int line)
+{
+	size_t	ln;
+	char	*err_msg;
+
+	extra = NULL;
+	err_msg = ft_format("%s%sError%s:%s%d%s: empty lines not allowed\n",
+			&ln, UNDERLINE, CYAN, RESET, BOLD, line, RESET);
+	return (err_msg);
 }

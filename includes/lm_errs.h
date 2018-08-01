@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/20 17:55:17 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/24 11:01:11 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/07/31 12:46:56 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "libft.h"
 # include "ft_printf.h"
 
-# define	DSP_SIZE 25
+# define	DSP_SIZE 26
 
 typedef enum	e_err_code
 {
@@ -44,6 +44,7 @@ typedef enum	e_err_code
 	ERR_DATA_NO_START_END,
 	ERR_DATA_NO_PATH,
 	ERR_ANTS_INV_NUMBER,
+	ERR_EMPTY_LINE,
 	ERR_PASS_FURTHER,
 	ERR_CMD_INV,
 	ERR_NONE
@@ -71,6 +72,7 @@ void		li_cmd_double(t_err *err, char **input, int size);
 void		li_link_double(t_err *err, char **input, int size);
 
 t_err		*raise_ants_inv_number(char *line);
+t_err		*raise_empty_line(void);
 
 t_err		*raise_cmd_bad_using(void);
 t_err		*raise_cmd_double_end(void);
@@ -127,5 +129,6 @@ char 		*hlr_data_no_start_end(void **extra, int ln);
 char		*hlr_data_no_path(void **extra, int line);
 
 char		*hlr_ants_inv_number(void **extra, int line);
+char		*hlr_empty_line(void **extra, int line);
 
 #endif
