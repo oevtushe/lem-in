@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/10 15:57:56 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/31 19:06:47 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/02 12:26:27 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_err	*parse_command(char *line, int *cmd_mode, t_pair *extra)
 		else if (!*cmd_mode)
 			err = raise_cmd_double_start();
 		else
-			err = raise_cmd_bad_using();
+			err = raise_cmd_bad_using(line);
 	}
 	else if (ft_strequ(&line[2], "end"))
 	{
@@ -33,7 +33,7 @@ t_err	*parse_command(char *line, int *cmd_mode, t_pair *extra)
 		else if (!*cmd_mode)
 			err = raise_cmd_double_end();
 		else
-			err = raise_cmd_bad_using();
+			err = raise_cmd_bad_using(line);
 	}
 	else
 		err = new_err(ERR_CMD_INV, NULL, 0);
@@ -77,6 +77,18 @@ static t_err	*gen_bad_coord_err(char *num1, char *num2)
 	return (err);
 }
 
+int			cmp_coords(void *elem, void *data)
+{
+	t_node	*room;
+	char	**arr;
+
+	arr = (char **)data;
+	room = (t_node *)((t_list *)elem)->content;
+	if (room->x == ft_atoi(arr[0]) && room->y == ft_atoi(arr[1]))
+		return (1);
+	return (0);
+}
+
 t_err		*parse_room(char *line, t_lmdata *data, int cmd_mode, t_pair *extra)
 {
 	size_t	len;
@@ -109,7 +121,11 @@ t_err		*parse_room(char *line, t_lmdata *data, int cmd_mode, t_pair *extra)
 	}
 	if (data->adj_cs >= data->adj_as)
 		realloc_adj(data);
-	if (!ft_arrcontains((void**)data->adj, data->adj_cs, arr[0], check_arr))
+	if (ft_arrgetidx((void**)data->adj, data->adj_cs, arr[0], check_arr) != -1)
+		err = raise_room_double_def(arr[0]);
+	else if (ft_arrgetidx((void **)data->adj, data->adj_cs, &arr[1], cmp_coords) != -1)
+		err = raise_coords_double_def(arr[1], arr[2]);
+	else
 	{
 		rd = new_node(arr[0], ft_atoi(arr[1]), ft_atoi(arr[2]));
 		data->adj[data->adj_cs++] = ft_lstnew(rd, sizeof(t_node));
@@ -119,8 +135,6 @@ t_err		*parse_room(char *line, t_lmdata *data, int cmd_mode, t_pair *extra)
 			extra->scd = data->adj[data->adj_cs - 1];
 		ft_memdel((void**)&rd);
 	}
-	else
-		err = raise_room_double_def(arr[0]);
 	ft_parrdel_zt((void***)&arr);
 	return (err);
 }

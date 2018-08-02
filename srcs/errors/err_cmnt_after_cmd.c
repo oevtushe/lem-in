@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   err_cmd_double_start.c                             :+:      :+:    :+:   */
+/*   err_cmnt_after_cmd.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/20 18:46:28 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/01 19:18:34 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/08/01 10:58:48 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/08/01 11:08:29 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lm_errs.h"
+#include "lem_in.h"
 
-t_err	*raise_cmd_double_start(void)
+t_err	*raise_cmnt_after_cmd(char *line)
 {
 	t_err *err;
 
-	err = new_err(ERR_CMD_DOUBLE_START, NULL, 0);
+	err = new_err(ERR_CMNT_AFTER_CMD, line, ft_strlen(line) + 1);
 	return (err);
 }
 
-char	*hlr_cmd_double_start(void **extra, int line)
+char	*hlr_cmnt_after_cmd(void **extra, int line)
 {
 	size_t	ln;
 	char	*err_msg;
 
-	err_msg = ft_format("%s%sError%s:%s%d%s: %sstart%s is already defined"
-			" in line %s%d%s\n", &ln, UNDERLINE, CYAN, RESET, BOLD,
-			line, RESET, GREEN, RESET, BOLD, *(int*)*extra, RESET);
+	err_msg = ft_format("%s%sError%s:%s%d%s: %scomments%s aren't allowed straight after %scmd%s definition"
+			" '%s%s%s'\n", &ln, UNDERLINE, CYAN, RESET, BOLD,
+			line, RESET, GREEN, RESET, GREEN, RESET, RED, *extra, RESET);
 	ft_strdel((char **)extra);
 	return (err_msg);
 }

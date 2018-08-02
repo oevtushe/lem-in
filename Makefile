@@ -6,7 +6,7 @@
 #    By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/12 10:30:58 by oevtushe          #+#    #+#              #
-#    Updated: 2018/07/31 18:36:24 by oevtushe         ###   ########.fr        #
+#    Updated: 2018/08/02 11:22:21 by oevtushe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,8 @@ include				$(FT_DIR)/Pretty.mk
 
 LN_ERRF				:= error_handler.c				\
 					   err_empty_line.c				\
-					   err_ants_inv_number.c		\
+					   err_cmnt_after_cmd.c			\
+					   err_ants_inv_num.c			\
 					   err_cmd_bad_using.c			\
 					   err_cmd_double_end.c			\
 					   err_cmd_double_start.c		\
@@ -50,8 +51,10 @@ LN_ERRF				:= error_handler.c				\
 					   err_room_extra_parms.c		\
 					   err_room_no_xy.c				\
 					   err_room_spaces.c			\
+					   err_coords_double_def.c		\
+					   li_cmd_double.c				\
+					   cmp_simple.c					\
 					   new_err.c					\
-					   find_in_pinput.c				\
 					   err_room_no_y.c
 
 LN_ERRS				:= $(LN_ERRF:%=$(LN_ERRS_DIR)/%)
@@ -84,6 +87,8 @@ LN_SRCF				:= main.c					\
 					   del_utils.c				\
 					   ft_freepa.c				\
 					   ft_freepa_sd.c			\
+					   ft_argsparser.c			\
+					   cmp_lst_str.c			\
 					   new_data.c
 LN_DEPF				:= lem_in.h lm_errs.h
 

@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:31:45 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/01 09:57:40 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/02 17:07:55 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include "ft_printf.h"
 # include "get_next_line.h"
 # include "lm_errs.h"
+
+# define BC_STOP 100
 
 typedef struct	s_rdata
 {
@@ -28,6 +30,8 @@ typedef struct	s_po
 {
 	int errors;
 	int bt;
+	int h;
+	int	s;
 }				t_po;
 
 typedef struct	s_lmdata
@@ -65,9 +69,9 @@ typedef struct	s_source
 	t_list *nodes;
 }				t_source;
 
-void		pdecode_paths(t_list *paths);
+void		pdecode_paths(t_list *paths, int *aop);
 char		*check_overlapping(t_lmdata *data, t_list *paths, t_list *path);
-char		*backtracking(t_lmdata *data, t_pair *paths, char *root);
+char		*backtracking(t_lmdata *data, t_pair *paths, char *root, int *bn);
 t_err		*add_link(t_lmdata *data, char *fst, char *scd);
 t_list		*clone_node(t_list *room);
 int			get_node_idx(t_lmdata *data, char *name);
@@ -93,12 +97,15 @@ t_list		*ft_arrtolst(void **arr, int size);
 t_list		*ft_lstnew_cc(void *content, size_t content_size);
 void		ft_freepa_sd(void ***arr, int size);
 void		ft_freepa(void ***arr, int size, void (*del)(void *content));
+int			ft_argsparser(char **argv, int size, void *container,
+				int (*set_option)(void *container, char option));
 void		del_empty_node(void *content, size_t content_size);
 
 t_err		*parse_link(char *line, t_lmdata *data);
 t_err		*parse_room(char *line, t_lmdata *data, int cmd_mode, t_pair *extra);
 t_err		*parse_command(char *line, int *cmd_mode, t_pair *extra);
 
+int			cmp_lst_str(t_list *elem, void *data);
 /*
 ** For tests
 */

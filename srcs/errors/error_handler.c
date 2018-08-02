@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/14 12:26:52 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/31 12:44:42 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/02 11:26:13 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,12 @@ t_err_dsp	**init_dsp(void)
 	dsp[19] = new_dsp_entry(ERR_DATA_NO_START, hlr_data_no_start);
 	dsp[20] = new_dsp_entry(ERR_DATA_NO_END, hlr_data_no_end);
 	dsp[21] = new_dsp_entry(ERR_DATA_NO_START_END, hlr_data_no_start_end);
-	dsp[22] = new_dsp_entry(ERR_ANTS_INV_NUMBER, hlr_ants_inv_number);
+	dsp[22] = new_dsp_entry(ERR_ANTS_INV_NUM, hlr_ants_inv_num);
 	dsp[23] = new_dsp_entry(ERR_ROOM_SPACES, hlr_room_spaces);
 	dsp[24] = new_dsp_entry(ERR_DATA_NO_PATH, hlr_data_no_path);
 	dsp[25] = new_dsp_entry(ERR_EMPTY_LINE, hlr_empty_line);
+	dsp[26] = new_dsp_entry(ERR_CMNT_AFTER_CMD, hlr_cmnt_after_cmd);
+	dsp[27] = new_dsp_entry(ERR_COORDS_DOUBLE_DEF, hlr_coords_double_def);
 	return (dsp);
 }
 

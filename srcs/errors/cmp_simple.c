@@ -1,32 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   err_cmd_bad_using.c                                :+:      :+:    :+:   */
+/*   cmp_simple.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/20 18:46:27 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/02 11:46:45 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/08/01 19:00:08 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/08/02 12:08:28 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lm_errs.h"
 
-t_err	*raise_cmd_bad_using(char *line)
+int		cmp_simple(void *elem, void *data)
 {
-	t_err *err;
+	size_t	len;
 
-	err = new_err(ERR_CMD_BAD_USING, line, ft_strlen(line) + 1);
-	return (err);
-}
-
-char	*hlr_cmd_bad_using(void **extra, int line)
-{
-	size_t	ln;
-	char	*err_msg;
-
-	err_msg = ft_format("%s%sError%s:%s%d%s: %sroom%s specification "
-				"expected '%s%s%s'\n", &ln, UNDERLINE, CYAN, RESET,
-				BOLD, line, RESET, GREEN, RESET, RED, (char *)*extra, RESET);
-	return (err_msg);
+	if (elem && data)
+	{
+		len = ft_strlen((char *)data);
+		if (!ft_strncmp((char *)elem, (char *)data, len))
+			return (1);
+	}
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/20 17:55:17 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/31 12:46:56 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/02 11:45:45 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "libft.h"
 # include "ft_printf.h"
 
-# define	DSP_SIZE 26
+# define	DSP_SIZE 28
 
 typedef enum	e_err_code
 {
@@ -43,7 +43,9 @@ typedef enum	e_err_code
 	ERR_DATA_NO_END,
 	ERR_DATA_NO_START_END,
 	ERR_DATA_NO_PATH,
-	ERR_ANTS_INV_NUMBER,
+	ERR_ANTS_INV_NUM,
+	ERR_CMNT_AFTER_CMD,
+	ERR_COORDS_DOUBLE_DEF,
 	ERR_EMPTY_LINE,
 	ERR_PASS_FURTHER,
 	ERR_CMD_INV,
@@ -64,17 +66,21 @@ typedef struct	s_err_dsp
 }				t_err_dsp;
 
 void		error_handler(t_err *err, int errors);
-int			find_in_pinput(char **input, int size, char *line);
+int			cmp_simple(void *elem, void *data);
+//int			find_in_pinput(char **input, int size, char *line);
 t_err 		*new_err(int err_code, void *extra, size_t extra_len);
 
 void		li_room_double_def(t_err *err, char **input, int size);
 void		li_cmd_double(t_err *err, char **input, int size);
 void		li_link_double(t_err *err, char **input, int size);
+void		li_coords_double_def(t_err *err, char **input, int size);
 
-t_err		*raise_ants_inv_number(char *line);
+t_err		*raise_coords_double_def(char *x, char *y);
+t_err		*raise_cmnt_after_cmd(char *line);
+t_err		*raise_ants_inv_num(char *line);
 t_err		*raise_empty_line(void);
 
-t_err		*raise_cmd_bad_using(void);
+t_err		*raise_cmd_bad_using(char *);
 t_err		*raise_cmd_double_end(void);
 t_err		*raise_cmd_double_start(void);
 
@@ -101,6 +107,7 @@ t_err		*raise_room_extra_parms(char **arr, int size, char *line);
 t_err		*raise_room_no_xy(char *line);
 t_err		*raise_room_no_y(char *line);
 
+char		*hlr_coords_double_def(void **extra, int line);
 char		*hlr_room_spaces(void **extra, int line);
 char		*hlr_room_bad_name(void **extra, int line);
 char		*hlr_room_double_def(void **extra, int line);
@@ -128,7 +135,8 @@ char 		*hlr_data_no_end(void **extra, int ln);
 char 		*hlr_data_no_start_end(void **extra, int ln);
 char		*hlr_data_no_path(void **extra, int line);
 
-char		*hlr_ants_inv_number(void **extra, int line);
+char		*hlr_ants_inv_num(void **extra, int line);
 char		*hlr_empty_line(void **extra, int line);
+char		*hlr_cmnt_after_cmd(void **extra, int line);
 
 #endif

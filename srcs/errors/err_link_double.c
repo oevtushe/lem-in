@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/20 18:46:28 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/23 16:47:21 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/01 19:08:53 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,16 @@ void	li_link_double(t_err *err, char **input, int size)
 
 	cl = ft_strjoin((char *)((t_pair*)err->extra)->fst, "-");
 	ft_strconnect(&cl, (char *)((t_pair*)err->extra)->scd, 1);
-	i = find_in_pinput(input, size, cl);
+	i = ft_arrgetidx((void **)input, size, cl, cmp_simple);
 	// connect string in second order
-	if (i == -1)
+	if (i == -1 || i == (size - 1))
 	{
 		ft_strdel(&cl);
 		cl = ft_strjoin((char *)((t_pair*)err->extra)->scd, "-");
 		ft_strconnect(&cl, (char *)((t_pair*)err->extra)->fst, 1);
-		i = find_in_pinput(input, size, cl);
+		i = ft_arrgetidx((void **)input, size, cl, cmp_simple);
 	}
-	if (i != -1)
+	if (i != -1 && i != (size - 1))
 	{
 		++i;
 		inner = ft_memalloc(sizeof(t_pair));

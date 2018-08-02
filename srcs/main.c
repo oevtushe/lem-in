@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:27:51 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/01 10:11:10 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/02 17:09:18 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,11 @@ t_err	*read_ants(int *ants)
 			if (*ants)
 				st = ERR_NONE;
 		}
-		else
-			err = raise_ants_inv_number(line);
+		if (st != ERR_NONE)
+			err = raise_ants_inv_num(line);
 		ft_strdel(&line);
 	}
-	if (!err && st != ERR_NONE)
+	if (!err && st == ERR_DATA_EMPTY)
 		err = raise_data_empty();
 	return (err);
 }
@@ -102,7 +102,11 @@ void	parse(t_lmdata **data, char **line, t_rdata *rdata)
 	if (rdata->data_type == 0 && (*line)[0] == '#' && (*line)[1] == '#')
 		rdata->err = parse_command(*line, &rdata->cmd_mode, (*data)->extra);
 	else if ((*line)[0] == '#')
+	{
+		if (rdata->cmd_mode)
+			rdata->err = raise_cmnt_after_cmd(*line);
 		return ;
+	}
 	else if (rdata->data_type == 0 && arr[0] && !ft_strchr(arr[0], '-') &&
 			!(rdata->err = parse_room(*line, *data, rdata->cmd_mode, (*data)->extra)))
 		rdata->cmd_mode = 0;
@@ -111,6 +115,8 @@ void	parse(t_lmdata **data, char **line, t_rdata *rdata)
 		rdata->data_type = 1;
 		rdata->err = parse_link(*line, *data);
 	}
+	else if (!rdata->err && rdata->cmd_mode)
+		rdata->err = raise_cmd_bad_using(*line);
 	else if (!rdata->err)
 		rdata->err = new_err(ERR_PASS_FURTHER, NULL, 0);
 }
@@ -124,37 +130,39 @@ void		li_handler(t_err *err, char **input, int i)
 		li_cmd_double(err, input, i);
 	else if (err->err_code == ERR_LINK_DOUBLE)
 		li_link_double(err, input, i);
+	else if (err->err_code == ERR_COORDS_DOUBLE_DEF)
+		li_coords_double_def(err, input, i);
 }
 
-void		further_handlers(t_err *err, t_pair *extra)
+void	further_handlers(t_err **err, t_pair *extra)
 {
 	if (!extra->fst && !extra->scd)
-		err = raise_data_no_start_end();
+		*err = raise_data_no_start_end();
 	else if  (!extra->fst)
-		err = raise_data_no_start();
+		*err = raise_data_no_start();
 	else if (!extra->scd)
-		err = raise_data_no_end();
+		*err = raise_data_no_end();
 }
 
-void	do_err(t_err *err, t_lmdata *data, int i, int oerrs)
+void	do_err(t_err **err, t_lmdata *data, int i, int oerrs)
 {
-	if (err)
+	if (*err)
 	{
-		err->line = i + 1;
-		li_handler(err, data->input, i);
+		(*err)->line = i;
+		li_handler(*err, data->input, i);
 	}
-	if (!err && (!data->extra->fst || !data->extra->scd))
-		err = new_err(ERR_PASS_FURTHER, NULL, 0);
-	if (err && err->err_code == ERR_PASS_FURTHER)
+	if (!*err && (!data->extra->fst || !data->extra->scd))
+		*err = new_err(ERR_PASS_FURTHER, NULL, 0);
+	if (*err && (*err)->err_code == ERR_PASS_FURTHER)
 		further_handlers(err, data->extra);
-	error_handler(err, oerrs);
+	error_handler(*err, oerrs);
 }
 
 void	free_adj(void *content)
 {
 	t_node *node;
 
-	node = (t_node *)content;
+	node = (t_node *)(((t_list *)content)->content);
 	ft_strdel(&node->name);
 }
 
@@ -183,8 +191,13 @@ t_lmdata *read_data(int errors)
 			realloc_input(&data->input, &arr_size);
 		if (rdata.err && rdata.err->err_code == ERR_CMD_INV)
 		{
-			rdata.err = NULL;
-			ft_strdel(&line);
+			if (rdata.cmd_mode)
+				rdata.err = raise_cmd_bad_using(line);
+			else
+			{
+				rdata.err = NULL;
+				ft_strdel(&line);
+			}
 		}
 		data->input[i++] = line;
 	}
@@ -192,7 +205,7 @@ t_lmdata *read_data(int errors)
 	ft_realloc((void **)&data->input, i * sizeof(void *), i * sizeof(void *));
 	if (rdata.err || !data->extra->fst || !data->extra->scd)
 	{
-		do_err(rdata.err, data, i, errors);
+		do_err(&rdata.err, data, i, errors);
 		ft_freepa_sd((void ***)&data->input, data->inp_size);
 		ft_freepa((void ***)&data->adj, data->adj_cs, free_adj);
 		ft_memdel((void **)&data->extra);
@@ -201,14 +214,16 @@ t_lmdata *read_data(int errors)
 	return (data);
 }
 
-int		move_ants(t_lmdata *data, t_list *paths, int *al)
+int		move_ants(t_lmdata *data, t_list *paths, int *al, int *aop)
 {
+	int		i;
 	int		new;
 	int		old;
 	t_list	*path;
 	int		sm;
 	int		spl;
 
+	i = 0;
 	sm = 0;
 	spl = ft_lstlen((t_list *)paths->content);
 	while (paths)
@@ -218,13 +233,13 @@ int		move_ants(t_lmdata *data, t_list *paths, int *al)
 		path = (t_list *)paths->content;
 		if (*al < data->ants && (int)ft_lstlen(path) - spl <= data->ants - *al)
 		{
+			++aop[i];
 			sm = 1;
 			new = ++*al;
 			path = path->next;
 		}
 		while (path)
 		{
-
 			old = ((t_node *)path->content)->ant;
 			((t_node *)path->content)->ant = 0;
 			if (new)
@@ -237,6 +252,7 @@ int		move_ants(t_lmdata *data, t_list *paths, int *al)
 			path = path->next;
 		}
 		paths = paths->next;
+		++i;
 	}
 	return (sm);
 }
@@ -256,7 +272,7 @@ int		move_ants(t_lmdata *data, t_list *paths, int *al)
 ** Continue until there is at least one moved ant in the paths list
 */
 
-void	print_ants(t_list *paths)
+void	print_ants(t_list *paths, t_pair *extra, t_po *po)
 {
 	int		c;
 	int		spc;
@@ -276,7 +292,13 @@ void	print_ants(t_list *paths)
 			{
 				if (spc)
 					ft_putchar(' ');
-				ft_printf("L%d-%s", ((t_node *)path->content)->ant, ((t_node *)path->content)->name);
+				if (po->h && ft_lstgetidx((t_list *)extra->fst, ((t_node *)path->content)->name, cmp_lst_str) != -1 && 
+						!ft_strequ(((t_node *)path->content)->name, ((t_node *)((t_list *)extra->scd)->content)->name))
+					ft_printf("%sL%d-%s%s", GREEN, ((t_node *)path->content)->ant, ((t_node *)path->content)->name, RESET);
+				else if (po->h && ft_strequ(((t_node *)path->content)->name, ((t_node *)((t_list *)extra->scd)->content)->name))
+					ft_printf("\033[38;5;125mL%d-%s\033[m", ((t_node *)path->content)->ant, ((t_node *)path->content)->name);
+				else
+					ft_printf("L%d-%s", ((t_node *)path->content)->ant, ((t_node *)path->content)->name);
 				((t_node *)path->content)->fresh = 0;
 				c = 1;
 				spc = 1;
@@ -334,13 +356,19 @@ void	full_copy(t_list *paths)
 	}
 }
 
-void	make_them_run(t_lmdata *data, t_list *paths)
+int		make_them_run(t_lmdata *data, t_list *paths, t_po *po, int *aop)
 {
 	int		al;
+	int		moves;
 
 	al = 0;
-	while (move_ants(data, paths, &al))
-		print_ants(paths);
+	moves = 0;
+	while (move_ants(data, paths, &al, aop))
+	{
+		print_ants(paths, data->extra, po);
+		++moves;
+	}
+	return (moves);
 }
 
 void	normalize(t_lmdata *data, t_list **paths)
@@ -375,26 +403,34 @@ int		cmp_len(void *a, void *b)
 	return (0);
 }
 
-int		parse_args(int argc, char **argv, t_po *po)
+int		set_option(void *container, char option)
 {
-	int	i;
+	t_po	*po;
+	int		res;
 
-	i = 1;
-	while (i < argc)
+	res = 0;
+	po = (t_po *)container;
+	if (option == 'e')
 	{
-		if (ft_strequ(argv[i], "-e"))
-			po->errors = 1;
-		else if (ft_strequ(argv[i], "-o"))
-			po->bt= 1;
-		else
-		{
-			ft_printf("Usage: \n-o -> use some kind of optimization for path searching\n"
-					"-e -> extended error printing\n");
-			return (0);
-		}
-		++i;
+		po->errors = 1;
+		res = 1;
 	}
-	return (1);
+	else if (option == 'o')
+	{
+		po->bt = 1;
+		res = 1;
+	}
+	else if (option == 'p')
+	{
+		po->h = 1;
+		res = 1;
+	}
+	else if (option == 's')
+	{
+		po->s = 1;
+		res = 1;
+	}
+	return (res);
 }
 
 t_list	*wrap_backtracking(t_lmdata *data)
@@ -404,13 +440,17 @@ t_list	*wrap_backtracking(t_lmdata *data)
 	t_list	*paths;
 	t_pair	extra;
 	int		size;
+	int		bn;
 
+	bn = 0;
 	pair.fst = NULL;
 	pair.scd = NULL;
 	extra.fst = data->extra->fst;
 	extra.scd = data->extra->scd;
 	backtracking(data, &pair,
-			((t_node *)((t_list *)data->extra->fst)->content)->name);
+			((t_node *)((t_list *)data->extra->fst)->content)->name, &bn);
+	if (bn == -1)
+		return (NULL);
 	data->extra->fst = extra.fst;
 	data->extra->scd = extra.scd;
 	paths = pair.fst;
@@ -431,32 +471,49 @@ int		main(int argc, char **argv)
 	t_err		*err;
 	t_lmdata	*data;
 	t_po		po;
+	int			*aop;
+	int			moves;
 
 	i = 0;
+	paths = NULL;
 	err = NULL;
 	po.errors = 0;
 	po.bt = 0;
-	if (!parse_args(argc, argv, &po))
-		return (-1);
+	if (argc > 1 && !ft_argsparser(&argv[1], argc - 1, (void *)&po, set_option))
+	{
+		ft_printf("Usage: \n-o -> use some kind of optimization for path searching\n"
+				"-e -> extended error printing\n"
+				"-p -> pretty output\n"
+				"-s -> statistics\n");
+		return (-42);
+	}
 	data = read_data(po.errors);
 	if (data)
 	{
 		if (po.bt)
 			paths = wrap_backtracking(data);
-		else
+		if (!paths)
 			paths = get_paths(data);
 		if (paths)
 		{
 			while (i < data->inp_size)
 			{
-				if (data->input[i])
+				if (po.h && data->input[i])
+					ft_printf("\033[38;5;35m%s\033[m\n", data->input[i]);
+				else
 					ft_printf("%s\n", data->input[i]);
 				++i;
 			}
 			ft_putchar('\n');
 			full_copy(paths);
-			pdecode_paths(paths);
-			make_them_run(data, paths);
+			aop = ft_memalloc(ft_lstlen(paths) * sizeof(int));
+			moves = make_them_run(data, paths, &po, aop);
+			if (po.s)
+			{
+				ft_putchar('\n');
+				pdecode_paths(paths, aop);
+				ft_printf("\n%sMoves%s: %d\n", ORANGE, RESET, moves);
+			}
 		}
 		else
 		{
