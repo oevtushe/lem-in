@@ -6,7 +6,7 @@
 #    By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/12 10:30:58 by oevtushe          #+#    #+#              #
-#    Updated: 2018/08/02 11:22:21 by oevtushe         ###   ########.fr        #
+#    Updated: 2018/08/03 16:28:22 by oevtushe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -89,6 +89,7 @@ LN_SRCF				:= main.c					\
 					   ft_freepa_sd.c			\
 					   ft_argsparser.c			\
 					   cmp_lst_str.c			\
+					   read_data.c				\
 					   new_data.c
 LN_DEPF				:= lem_in.h lm_errs.h
 

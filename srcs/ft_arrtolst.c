@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/30 15:26:38 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/30 16:16:33 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/03 15:50:31 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /*
 ** Function converts array of pointers to list
+** Data from the array won't be copied, just captured by pointer
 */
 
 t_list *ft_arrtolst(void **arr, int size)

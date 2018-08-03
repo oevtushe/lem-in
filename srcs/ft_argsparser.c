@@ -6,19 +6,22 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 15:07:28 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/01 16:55:39 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/03 15:49:35 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem_in.h"
+#include "libft.h"
 
 /*
 ** Function for program's options parsing.
 ** Options may be passed as '-a' '-r' etc..
 ** or combined '-ar' ...
+**
 ** Notice:
-** 		pass only array with options, array mustn't contain
-** 		first program argument (program name)
+** 		1. Pass only array with options, array mustn't contain
+** 			first program argument (program name)
+** 		2. Only single char allowed per option (no '-hh' option possible,
+** 			because it'll be interpreted as '-h -h')
 **
 ** @param	argv		array of arguments (without program name)
 ** @param	size		size of the array of arguments (without program name)
@@ -41,21 +44,24 @@ int		ft_argsparser(char **argv, int size, void *container,
 	i = 0;
 	len = 0;
 	res = 0;
-	while (i < size)
+	if (argv)
 	{
-		len = (int)ft_strlen(argv[i]);
-		if (argv[i][0] == '-' && len > 1)
+		while (i < size)
 		{
-			j = 0;
-			while (++j < len)
-				if (!set_option(container, argv[i][j]))
-					break ;
+			len = (int)ft_strlen(argv[i]);
+			if (argv[i][0] == '-' && len > 1)
+			{
+				j = 0;
+				while (++j < len)
+					if (!set_option(container, argv[i][j]))
+						break ;
+			}
+			else
+				break ;
+			++i;
 		}
-		else
-			break ;
-		++i;
+		if (i == size && j == len)
+			res = 1;
 	}
-	if (i == size && j == len)
-		res = 1;
 	return (res);
 }

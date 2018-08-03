@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/14 09:51:57 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/02 16:10:25 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/03 19:47:51 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ static t_list	*clone_elem(t_list *elem)
 	return (new_one);
 }
 
-static int	cmp_str_str(t_list *cn, void *sn)
+static int	cmp_str_str(void *cn, void *sn)
 {
-	if (ft_strequ(cn->content, sn))
+	if (ft_strequ((char *)cn, sn))
 		return (1);
 	return (0);
 }
@@ -63,17 +63,12 @@ char	*backtracking(t_lmdata *data, t_pair *paths, char *root, int *bn)
 		else
 		{
 			ft_lstadd((t_list**)&paths->scd, ft_lstnew(path, sizeof(t_list)));
-			//pdecode_paths(data, (t_list*)paths->scd);
-			/* In case when there are N start ways and
-			   M ways to fininish, where N > M */
 			if (ft_lstlen((t_list*)paths->scd) > ft_lstlen((t_list*)paths->fst))
 				paths->fst = ft_lstmap(paths->scd, clone_elem);
 			if (!(lo = backtracking(data, paths, root, bn)))
 				return (NULL);
 			else
 			{
-				ft_printf("overlap: %s\n", lo);
-				/* In case of collapsing with nodes not from current path */
 				if (ft_lstgetidx(((t_list*)paths->scd)->content, lo, cmp_lst_str) == -1)
 				{
 					paths->scd = ((t_list*)paths->scd)->next;

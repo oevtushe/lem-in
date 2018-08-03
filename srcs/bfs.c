@@ -6,22 +6,13 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/10 15:54:47 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/30 18:33:40 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/03 19:35:21 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-/*
-static int check(t_list *elem, void *data)
-{
-	if (ft_strequ((char *)data, ((t_node *)elem->content)->name))
-		return (1);
-	return (0);
-}
-*/
-
-void		bfs(t_lmdata *data, t_list *start, t_list *black_list, int (*check)(t_list *, void *))
+void		bfs(t_lmdata *data, t_list *start, t_list *black_list, int (*check)(void *, void *))
 {
 	t_list	*queue;
 	t_node	*u;
@@ -29,7 +20,7 @@ void		bfs(t_lmdata *data, t_list *start, t_list *black_list, int (*check)(t_list
 	int		idx_u;
 
 	queue = NULL;
-	queue = clone_node(start);
+	queue = ft_lstnew_cc(start->content, sizeof(t_node));
 	((t_node *)queue->content)->d = 0;
 	while (queue)
 	{

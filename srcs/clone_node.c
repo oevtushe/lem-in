@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/05 09:42:41 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/05 10:39:50 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/03 18:39:39 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ t_list	*clone_node(t_list *room)
 	t_node *cr;
 
 	cr = (t_node*)room->content;
-	//clone = new_room_node(cr->name, cr->x, cr->y);
 	clone = ft_lstnew(NULL, 0);
 	clone->content = cr;
 	clone->content_size = sizeof(t_node);

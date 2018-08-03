@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:31:45 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/03 10:43:13 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/03 16:29:44 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ t_list		*new_room_node(char *name, int x, int y);
 void		free_node(t_node **node);
 void		print_path(t_lmdata *data);
 void		save_path(t_lmdata *data, t_list **path);
-void		bfs(t_lmdata *data, t_list *start, t_list *black_list, int (*check)(t_list *, void *));
+void		bfs(t_lmdata *data, t_list *start, t_list *black_list, int (*check)(void *, void *));
 void		wash_up_map(t_lmdata *data);
 void		add_path_to_blacklist(t_list **black_list, t_list *path);
 void		add_node_to_blacklist(t_list **black_list, char *o);
@@ -111,7 +111,9 @@ t_err		*parse_link(char *line, t_lmdata *data);
 t_err		*parse_room(char *line, t_lmdata *data, int cmd_mode, t_pair *extra);
 t_err		*parse_command(char *line, int *cmd_mode, t_pair *extra);
 
-int			cmp_lst_str(t_list *elem, void *data);
+int			cmp_lst_str(void *elem, void *data);
+t_lmdata	*read_data(int errors);
+t_err		*read_ants(int *ants);
 /*
 ** For tests
 */

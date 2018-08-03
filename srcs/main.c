@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:27:51 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/03 11:55:40 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/03 19:33:32 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,21 @@ t_err	*read_ants(int *ants)
 	return (err);
 }
 
-static int check(t_list *elem, void *data)
+static int check(void *elem, void *data)
 {
-	if (ft_strequ((char *)data, ((t_node *)elem->content)->name))
+	if (ft_strequ((char *)data, ((t_node *)elem)->name))
 		return (1);
 	return (0);
 }
 
+void	del_no_content(void *content, size_t content_size)
+{
+	content = NULL;
+	content_size = 0;
+}
+
 /*
-** Magic in case when start and end is the only nodes.
+** Function find's paths between start and end room
 */
 
 t_list	*get_paths(t_lmdata *data)
@@ -67,9 +73,8 @@ t_list	*get_paths(t_lmdata *data)
 	while (((t_node*)((t_list*)data->extra->scd)->content)->p != -1)
 	{
 		save_path(data, &path);
-		ft_lstappend(&paths, ft_lstnew(path, sizeof(t_list)));
+		ft_lstappend(&paths, ft_lstnew_cc(path, sizeof(t_list)));
 		add_path_to_blacklist(&black_list, path);
-		// In case start-end + some other paths
 		if (((t_node*)((t_list*)data->extra->scd)->content)->p == \
 				get_node_idx(data, ((t_node*)((t_list*)data->extra->fst)->content)->name))
 		{
@@ -79,141 +84,16 @@ t_list	*get_paths(t_lmdata *data)
 		}
 		wash_up_map(data);
 		bfs(data, data->extra->fst, black_list, check);
+		// good becase captured by paths
 		path = NULL;
 	}
-	// restore deleted link
 	if (dl)
 		add_link(data, ((t_node*)((t_list*)data->extra->fst)->content)->name,
 				((t_node*)((t_list*)data->extra->scd)->content)->name);
+	// black_list contains only pointers on original rooms
+	if (black_list)
+		ft_lstdel(&black_list, del_no_content);
 	return (paths);
-}
-
-void	init_data(t_lmdata **data, char **line, t_rdata *rdata)
-{
-	*line = NULL;
-	rdata->cmd_mode = 0;
-	rdata->data_type = 0;
-	*data = new_data(1);
-}
-
-void	parse(t_lmdata **data, char **line, t_rdata *rdata)
-{
-	char **arr;
-
-	arr = ft_strsplit(*line, ' ');
-	if (rdata->data_type == 0 && (*line)[0] == '#' && (*line)[1] == '#')
-		rdata->err = parse_command(*line, &rdata->cmd_mode, (*data)->extra);
-	else if ((*line)[0] == '#')
-	{
-		if (rdata->cmd_mode)
-			rdata->err = raise_cmnt_after_cmd(*line);
-		return ;
-	}
-	else if (rdata->data_type == 0 && arr[0] && !ft_strchr(arr[0], '-') &&
-			!(rdata->err = parse_room(*line, *data, rdata->cmd_mode, (*data)->extra)))
-		rdata->cmd_mode = 0;
-	else if (!rdata->err && (*data)->extra->fst && (*data)->extra->scd)
-	{
-		rdata->data_type = 1;
-		rdata->err = parse_link(*line, *data);
-	}
-	else if (!rdata->err && rdata->cmd_mode)
-		rdata->err = raise_cmd_bad_using(*line);
-	else if (!rdata->err)
-		rdata->err = new_err(ERR_PASS_FURTHER, NULL, 0);
-}
-
-void		li_handler(t_err *err, char **input, int i)
-{
-	if (err->err_code == ERR_ROOM_DOUBLE_DEF)
-		li_room_double_def(err, input, i);
-	else if ((err->err_code == ERR_CMD_DOUBLE_START
-				|| err->err_code == ERR_CMD_DOUBLE_END))
-		li_cmd_double(err, input, i);
-	else if (err->err_code == ERR_LINK_DOUBLE)
-		li_link_double(err, input, i);
-	else if (err->err_code == ERR_COORDS_DOUBLE_DEF)
-		li_coords_double_def(err, input, i);
-}
-
-void	further_handlers(t_err **err, t_pair *extra)
-{
-	if (!extra->fst && !extra->scd)
-		*err = raise_data_no_start_end();
-	else if  (!extra->fst)
-		*err = raise_data_no_start();
-	else if (!extra->scd)
-		*err = raise_data_no_end();
-}
-
-void	do_err(t_err **err, t_lmdata *data, int i, int oerrs)
-{
-	if (*err)
-	{
-		(*err)->line = i;
-		li_handler(*err, data->input, i);
-	}
-	if (!*err && (!data->extra->fst || !data->extra->scd))
-		*err = new_err(ERR_PASS_FURTHER, NULL, 0);
-	if (*err && (*err)->err_code == ERR_PASS_FURTHER)
-		further_handlers(err, data->extra);
-	error_handler(*err, oerrs);
-}
-
-void	free_adj(void *content)
-{
-	t_node *node;
-
-	node = (t_node *)(((t_list *)content)->content);
-	ft_strdel(&node->name);
-}
-
-t_lmdata *read_data(int errors)
-{
-	t_lmdata	*data;
-	char 		*line;
-	t_rdata		rdata;
-	int			arr_size;
-	int			i;
-
-	i = 0;
-	data = NULL;
-	arr_size = 1;
-	init_data(&data, &line, &rdata);
-	ft_realloc((void **)&data->input, 0, sizeof(void *) * arr_size);
-	rdata.err = read_ants(&data->ants);
-	data->input[i++] = ft_itoa(data->ants);
-	while (!rdata.err && get_next_line(0, &line))
-	{
-		if (!ft_strlen(line))
-			rdata.err = raise_empty_line();
-		else
-			parse(&data, &line, &rdata);
-		if (i >= arr_size)
-			realloc_input(&data->input, &arr_size);
-		if (rdata.err && rdata.err->err_code == ERR_CMD_INV)
-		{
-			if (rdata.cmd_mode)
-				rdata.err = raise_cmd_bad_using(line);
-			else
-			{
-				rdata.err = NULL;
-				ft_strdel(&line);
-			}
-		}
-		data->input[i++] = line;
-	}
-	data->inp_size = i;
-	ft_realloc((void **)&data->input, i * sizeof(void *), i * sizeof(void *));
-	if (rdata.err || !data->extra->fst || !data->extra->scd)
-	{
-		do_err(&rdata.err, data, i, errors);
-		ft_freepa_sd((void ***)&data->input, data->inp_size);
-		ft_freepa((void ***)&data->adj, data->adj_cs, free_adj);
-		ft_memdel((void **)&data->extra);
-		ft_memdel((void **)&data);
-	}
-	return (data);
 }
 
 int		move_ants(t_lmdata *data, t_list *paths, int *al, int *aop)
@@ -325,48 +205,6 @@ void	print_ants(t_list *paths, t_pair *extra, t_po *po)
 	}
 }
 
-t_node	*dup_room(t_node *room)
-{
-	t_node	*new;
-
-	new = (t_node *)ft_memalloc(sizeof(t_node));
-	if (new)
-	{
-		new->x = room->x;
-		new->y = room->y;
-		new->name = ft_strdup(room->name);
-		new->p = room->p;
-		new->d = room->d;
-		new->visited = room->visited;
-		new->ant = room->ant;
-		new->fresh = room->fresh;
-	}
-	return (new);
-}
-
-void	full_copy(t_list *paths)
-{
-	t_path	*pn;
-	t_path	*p;
-	t_list	*lst;
-
-	while (paths)
-	{
-		p = (t_path *)paths->content;
-		pn = ft_memalloc(sizeof(t_path));
-		pn->list = p->list;
-		pn->color = p->color;
-		paths->content = pn;
-		lst = pn->list;
-		while (lst)
-		{
-			lst->content = dup_room((t_node *)lst->content);
-			lst = lst->next;
-		}
-		paths = paths->next;
-	}
-}
-
 int		make_them_run(t_lmdata *data, t_list *paths, t_po *po, int *aop)
 {
 	int		al;
@@ -447,12 +285,12 @@ int		set_option(void *container, char option)
 
 t_list	*wrap_backtracking(t_lmdata *data)
 {
-	t_pair	pair;
+	int		bn;
+	int		size;
 	void	**arr;
+	t_pair	pair;
 	t_list	*paths;
 	t_pair	extra;
-	int		size;
-	int		bn;
 
 	bn = 0;
 	pair.fst = NULL;
@@ -467,7 +305,6 @@ t_list	*wrap_backtracking(t_lmdata *data)
 	data->extra->scd = extra.scd;
 	paths = pair.fst;
 	normalize(data, &paths);
-
 	size = ft_lstlen(paths);
 	arr = ft_lsttoarr(paths);
 	ft_qsarr(arr, 0, size - 1, cmp_len);
@@ -476,9 +313,9 @@ t_list	*wrap_backtracking(t_lmdata *data)
 	return (paths);
 }
 
-int		cmp_color(t_list *elem, void *data)
+int		cmp_color(void *elem, void *data)
 {
-	if (*(int *)elem->content == *(int *)data)
+	if (*(int *)elem == *(int *)data)
 		return (1);
 	return (0);
 }
@@ -523,22 +360,60 @@ int		gen_color(t_list *colors)
 	return (color);
 }
 
-void	rebase_one(t_list *paths)
+/*
+** function doesn't clone nodes, just catchs it by pointer 
+** don't need to free anything
+*/
+void	rebase_paths(t_list *paths)
 {
 	t_path	*p;
 	t_list	*colors;
 	int		def_one;
 
-	def_one = 125;
+	def_one = 125; // ?
 	colors = ft_lstnew(&def_one, sizeof(int));
 	while (paths)
 	{
-		p = ft_memalloc(sizeof(t_path));
+		p = (t_path *)ft_memalloc(sizeof(t_path));
 		p->list = paths->content;
 		p->color = gen_color(colors);
 		paths->content = p;
 		paths = paths->next;
 	}
+}
+
+t_node	*dup_node_hlp(t_node *room)
+{
+	t_node	*new;
+
+	new = (t_node *)ft_memalloc(sizeof(t_node));
+	ft_memcpy(new, room, sizeof(t_node));
+	new->name = ft_strdup(room->name);
+	return (new);
+}
+
+t_list	*dup_node(t_list *elem)
+{
+	t_list	*new;
+	t_node	*node;
+
+	node = dup_node_hlp((t_node *)elem->content);
+	new = ft_lstnew_cc(node, sizeof(t_list));
+	return (new);
+}
+
+t_list	*copy_paths(t_list *path_lst)
+{
+	t_list	*copy;
+	t_path	*cpath;
+	t_path	*npath;
+
+	npath = (t_path *)ft_memalloc(sizeof(t_path));
+	cpath = (t_path *)path_lst->content;
+	ft_memcpy(npath, cpath, sizeof(t_path));
+	npath->list = ft_lstmap(cpath->list, dup_node);
+	copy = ft_lstnew_cc(npath, sizeof(t_path));
+	return (copy);
 }
 
 int		main(int argc, char **argv)
@@ -550,6 +425,7 @@ int		main(int argc, char **argv)
 	t_po		po;
 	int			*aop;
 	int			moves;
+	time_t		tm;
 
 	i = 0;
 	paths = NULL;
@@ -571,10 +447,9 @@ int		main(int argc, char **argv)
 			paths = wrap_backtracking(data);
 		if (!paths)
 			paths = get_paths(data);
-		time_t tm;
-
 		srand((unsigned int)time(&tm));
-		rebase_one(paths);
+		//
+		rebase_paths(paths);
 		if (paths)
 		{
 			while (i < data->inp_size)
@@ -586,7 +461,7 @@ int		main(int argc, char **argv)
 				++i;
 			}
 			ft_putchar('\n');
-			full_copy(paths);
+			ft_lstmap(paths, copy_paths);
 			aop = ft_memalloc(ft_lstlen(paths) * sizeof(int));
 			moves = make_them_run(data, paths, &po, aop);
 			if (po.s)
