@@ -6,12 +6,14 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:27:51 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/02 17:09:18 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/03 11:55:40 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
 #include "lem_in.h"
+#include <stdlib.h>
+#include <time.h>
 
 t_err	*read_ants(int *ants)
 {
@@ -225,12 +227,12 @@ int		move_ants(t_lmdata *data, t_list *paths, int *al, int *aop)
 
 	i = 0;
 	sm = 0;
-	spl = ft_lstlen((t_list *)paths->content);
+	spl = ft_lstlen(((t_path *)paths->content)->list);
 	while (paths)
 	{
 		new = 0;
 		old = 0;
-		path = (t_list *)paths->content;
+		path = ((t_path *)paths->content)->list;
 		if (*al < data->ants && (int)ft_lstlen(path) - spl <= data->ants - *al)
 		{
 			++aop[i];
@@ -277,36 +279,38 @@ void	print_ants(t_list *paths, t_pair *extra, t_po *po)
 	int		c;
 	int		spc;
 	t_list	*runner;
-	t_list	*path;
+	t_path	*path;
+	t_list	*lst;
 
 	c = 0;
 	spc = 0;
 	runner = paths;
 	while (1)
 	{
-		ft_lstcorder((t_list **)&runner->content);
-		path = (t_list *)runner->content;
-		while (path)
+		ft_lstcorder(&((t_path *)runner->content)->list);
+		path = (t_path *)runner->content;
+		lst = path->list;
+		while (lst)
 		{
-			if (((t_node *)path->content)->ant && ((t_node *)path->content)->fresh)
+			if (((t_node *)lst->content)->ant && ((t_node *)lst->content)->fresh)
 			{
 				if (spc)
 					ft_putchar(' ');
-				if (po->h && ft_lstgetidx((t_list *)extra->fst, ((t_node *)path->content)->name, cmp_lst_str) != -1 && 
-						!ft_strequ(((t_node *)path->content)->name, ((t_node *)((t_list *)extra->scd)->content)->name))
-					ft_printf("%sL%d-%s%s", GREEN, ((t_node *)path->content)->ant, ((t_node *)path->content)->name, RESET);
-				else if (po->h && ft_strequ(((t_node *)path->content)->name, ((t_node *)((t_list *)extra->scd)->content)->name))
-					ft_printf("\033[38;5;125mL%d-%s\033[m", ((t_node *)path->content)->ant, ((t_node *)path->content)->name);
+				if (po->h && ft_lstgetidx((t_list *)extra->fst, ((t_node *)lst->content)->name, cmp_lst_str) != -1 && 
+						!ft_strequ(((t_node *)lst->content)->name, ((t_node *)((t_list *)extra->scd)->content)->name))
+					ft_printf("%s%sL%d-%s%s", BOLD, GREEN, ((t_node *)lst->content)->ant, ((t_node *)lst->content)->name, RESET);
+				else if (po->h && ft_strequ(((t_node *)lst->content)->name, ((t_node *)((t_list *)extra->scd)->content)->name))
+					ft_printf("%s\033[38;5;196mL%d-%s\033[m", BOLD, ((t_node *)lst->content)->ant, ((t_node *)lst->content)->name);
 				else
-					ft_printf("L%d-%s", ((t_node *)path->content)->ant, ((t_node *)path->content)->name);
-				((t_node *)path->content)->fresh = 0;
+					ft_printf("\033[38;5;%dmL%d-%s\033[m", path->color, ((t_node *)lst->content)->ant, ((t_node *)lst->content)->name);
+				((t_node *)lst->content)->fresh = 0;
 				c = 1;
 				spc = 1;
 				break ;
 			}
-			path = path->next;
+			lst = lst->next;
 		}
-		ft_lstcorder((t_list **)&runner->content);
+		ft_lstcorder(&((t_path *)runner->content)->list);
 		runner = runner->next;
 		if(!runner && c)
 		{
@@ -342,15 +346,22 @@ t_node	*dup_room(t_node *room)
 
 void	full_copy(t_list *paths)
 {
-	t_list *path;
+	t_path	*pn;
+	t_path	*p;
+	t_list	*lst;
 
 	while (paths)
 	{
-		path = (t_list *)paths->content;
-		while (path)
+		p = (t_path *)paths->content;
+		pn = ft_memalloc(sizeof(t_path));
+		pn->list = p->list;
+		pn->color = p->color;
+		paths->content = pn;
+		lst = pn->list;
+		while (lst)
 		{
-			path->content = dup_room((t_node *)path->content);
-			path = path->next;
+			lst->content = dup_room((t_node *)lst->content);
+			lst = lst->next;
 		}
 		paths = paths->next;
 	}
@@ -428,6 +439,7 @@ int		set_option(void *container, char option)
 	else if (option == 's')
 	{
 		po->s = 1;
+		po->h = 1;
 		res = 1;
 	}
 	return (res);
@@ -464,6 +476,71 @@ t_list	*wrap_backtracking(t_lmdata *data)
 	return (paths);
 }
 
+int		cmp_color(t_list *elem, void *data)
+{
+	if (*(int *)elem->content == *(int *)data)
+		return (1);
+	return (0);
+}
+
+int		check_green_level(int color)
+{
+	if ((color >= 46 && color <= 49) ||
+		(color >= 82 && color <= 85) ||
+		(color >= 118 && color <= 121) ||
+		(color >= 154 && color <= 157) ||
+		(color >= 190 && color <= 193))
+		return (0);
+	return (1);
+}
+
+int		check_shadowy(int color)
+{
+	if ((color >= 16 && color <= 19) ||
+			(color >= 51 && color <= 55) ||
+			(color >= 88 && color <= 91) ||
+			(color >= 124 && color <= 127))
+		return (0);
+	return (1);
+}
+
+int		check_red_level(int color)
+{
+	if ((color >= 160 && color <= 163) ||
+			(color >= 196 && color <= 199))
+		return (0);
+	return (1);
+}
+
+int		gen_color(t_list *colors)
+{
+	int	color;
+
+	color = (rand() % 215) + 16;
+	while (ft_lstgetidx(colors, &color, cmp_color) != -1 || !check_green_level(color) ||
+			!check_shadowy(color) || !check_red_level(color))
+		color = (rand() % 215) + 16;
+	return (color);
+}
+
+void	rebase_one(t_list *paths)
+{
+	t_path	*p;
+	t_list	*colors;
+	int		def_one;
+
+	def_one = 125;
+	colors = ft_lstnew(&def_one, sizeof(int));
+	while (paths)
+	{
+		p = ft_memalloc(sizeof(t_path));
+		p->list = paths->content;
+		p->color = gen_color(colors);
+		paths->content = p;
+		paths = paths->next;
+	}
+}
+
 int		main(int argc, char **argv)
 {
 	int			i;
@@ -484,7 +561,7 @@ int		main(int argc, char **argv)
 		ft_printf("Usage: \n-o -> use some kind of optimization for path searching\n"
 				"-e -> extended error printing\n"
 				"-p -> pretty output\n"
-				"-s -> statistics\n");
+				"-s -> statistics (turns on -p too)\n");
 		return (-42);
 	}
 	data = read_data(po.errors);
@@ -494,6 +571,10 @@ int		main(int argc, char **argv)
 			paths = wrap_backtracking(data);
 		if (!paths)
 			paths = get_paths(data);
+		time_t tm;
+
+		srand((unsigned int)time(&tm));
+		rebase_one(paths);
 		if (paths)
 		{
 			while (i < data->inp_size)

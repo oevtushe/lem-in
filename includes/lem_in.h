@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:31:45 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/02 17:07:55 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/03 10:43:13 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,12 @@ typedef struct	s_lmdata
 	char	**input;
 	int		inp_size;
 }				t_lmdata;
+
+typedef	struct	s_path
+{
+	int		color;
+	t_list	*list;
+}				t_path;
 
 typedef struct	s_point
 {
