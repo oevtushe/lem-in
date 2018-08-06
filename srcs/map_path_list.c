@@ -1,29 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   del_node.c                                         :+:      :+:    :+:   */
+/*   map_path_list.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/13 16:44:07 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/06 19:20:01 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/08/06 19:25:12 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/08/06 19:30:41 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-void	del_node(void *content, size_t content_size)
+t_list	*map_path_list(t_list *elem)
 {
+	t_list	*npath;
 	t_node	*node;
 
-	content_size = 0;
-	node = (t_node*)content;
-	ft_strdel(&node->name);
-	ft_memdel(&content);
-}
-
-void	free_node(t_node **node)
-{
-	ft_strdel(&(*node)->name);
-	ft_memdel((void**)node);
+	node = dup_node(elem->content);
+	npath = ft_lstnew_cc(node, sizeof(t_node));
+	return (npath);
 }

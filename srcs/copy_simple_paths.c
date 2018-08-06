@@ -1,29 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   del_node.c                                         :+:      :+:    :+:   */
+/*   copy_simple_paths.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/13 16:44:07 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/06 19:20:01 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/08/06 18:58:55 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/08/06 19:29:32 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-void	del_node(void *content, size_t content_size)
+static t_list	*dup_path(t_list *elem)
 {
+	t_list	*new;
 	t_node	*node;
 
-	content_size = 0;
-	node = (t_node*)content;
-	ft_strdel(&node->name);
-	ft_memdel(&content);
+	node = dup_node((t_node *)elem->content);
+	new = ft_lstnew_cc(node, sizeof(t_node));
+	return (new);
 }
 
-void	free_node(t_node **node)
+t_list	*copy_simple_paths(t_list *paths_node)
 {
-	ft_strdel(&(*node)->name);
-	ft_memdel((void**)node);
+	t_list *copy;
+	t_list *cpath;
+	t_list *npath;
+
+	cpath = (t_list *)paths_node->content;
+	npath = ft_lstmap(cpath, dup_path);
+	copy = ft_lstnew_cc(npath, sizeof(t_list));
+	return (copy);
 }

@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 16:10:48 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/03 18:57:17 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/06 14:51:02 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,13 +103,13 @@ static void	init_data(t_lmdata **data, char **line, t_rdata *rdata)
 	ft_realloc((void **)&(*data)->input, 0, sizeof(void *) * (*data)->inp_size);
 }
 
-void		do_cmd_inv(int cmd_mode, char **line, t_err *err)
+void		do_cmd_inv(int cmd_mode, char **line, t_err **err)
 {
 	if (cmd_mode)
-		err = raise_cmd_bad_using(*line);
+		*err = raise_cmd_bad_using(*line);
 	else
 	{
-		ft_memdel((void **)&err);
+		ft_memdel((void **)err);
 		ft_strdel(line);
 	}
 }
@@ -132,7 +132,7 @@ t_lmdata	*read_data(int errors)
 		else
 			parse(&data, &line, &rdata);
 		if (rdata.err && rdata.err->err_code == ERR_CMD_INV)
-			do_cmd_inv(rdata.cmd_mode, &line, rdata.err);
+			do_cmd_inv(rdata.cmd_mode, &line, &rdata.err);
 		if (i >= data->inp_size)
 			realloc_input(&data->input, &data->inp_size);
 		data->input[i++] = line;

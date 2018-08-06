@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:31:45 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/03 16:29:44 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/06 19:31:25 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ typedef struct	s_source
 
 void		pdecode_paths(t_list *paths, int *aop);
 char		*check_overlapping(t_lmdata *data, t_list *paths, t_list *path);
-char		*backtracking(t_lmdata *data, t_pair *paths, char *root, int *bn);
+char		*backtracking(t_lmdata *data, t_pair *paths, t_pair *roots, int *bn);
 t_err		*add_link(t_lmdata *data, char *fst, char *scd);
 t_list		*clone_node(t_list *room);
 int			get_node_idx(t_lmdata *data, char *name);
@@ -114,6 +114,13 @@ t_err		*parse_command(char *line, int *cmd_mode, t_pair *extra);
 int			cmp_lst_str(void *elem, void *data);
 t_lmdata	*read_data(int errors);
 t_err		*read_ants(int *ants);
+void		print_paths(t_list *paths);
+t_list		*copy_rebased_paths(t_list *path_lst);
+t_list		*copy_simple_paths(t_list *paths_node);
+void		del_simple_paths(void *content, size_t content_size);
+t_node		*dup_node(t_node *room);
+t_list		*map_path_list(t_list *elem);
+
 /*
 ** For tests
 */

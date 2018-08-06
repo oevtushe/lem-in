@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:27:51 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/03 19:33:32 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/06 18:57:58 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,19 +291,23 @@ t_list	*wrap_backtracking(t_lmdata *data)
 	t_pair	pair;
 	t_list	*paths;
 	t_pair	extra;
+	t_pair	roots;
 
 	bn = 0;
 	pair.fst = NULL;
 	pair.scd = NULL;
 	extra.fst = data->extra->fst;
 	extra.scd = data->extra->scd;
+	roots.fst = ((t_node *)((t_list *)data->extra->fst)->content)->name;
+	roots.scd = data->extra->fst;
 	backtracking(data, &pair,
-			((t_node *)((t_list *)data->extra->fst)->content)->name, &bn);
+			&roots, &bn);
 	if (bn == -1)
 		return (NULL);
 	data->extra->fst = extra.fst;
 	data->extra->scd = extra.scd;
 	paths = pair.fst;
+	print_paths(paths);
 	normalize(data, &paths);
 	size = ft_lstlen(paths);
 	arr = ft_lsttoarr(paths);
@@ -382,38 +386,17 @@ void	rebase_paths(t_list *paths)
 	}
 }
 
-t_node	*dup_node_hlp(t_node *room)
+int		bt_condition(t_lmdata *data)
 {
-	t_node	*new;
+	int res;
 
-	new = (t_node *)ft_memalloc(sizeof(t_node));
-	ft_memcpy(new, room, sizeof(t_node));
-	new->name = ft_strdup(room->name);
-	return (new);
-}
-
-t_list	*dup_node(t_list *elem)
-{
-	t_list	*new;
-	t_node	*node;
-
-	node = dup_node_hlp((t_node *)elem->content);
-	new = ft_lstnew_cc(node, sizeof(t_list));
-	return (new);
-}
-
-t_list	*copy_paths(t_list *path_lst)
-{
-	t_list	*copy;
-	t_path	*cpath;
-	t_path	*npath;
-
-	npath = (t_path *)ft_memalloc(sizeof(t_path));
-	cpath = (t_path *)path_lst->content;
-	ft_memcpy(npath, cpath, sizeof(t_path));
-	npath->list = ft_lstmap(cpath->list, dup_node);
-	copy = ft_lstnew_cc(npath, sizeof(t_path));
-	return (copy);
+	res = 0;
+	bfs(data, data->extra->fst, NULL, check);
+	if (((t_node*)((t_list*)data->extra->scd)->content)->p != \
+			get_node_idx(data, ((t_node*)((t_list*)data->extra->fst)->content)->name))
+		res = 1;
+	wash_up_map(data);
+	return (res);
 }
 
 int		main(int argc, char **argv)
@@ -443,7 +426,7 @@ int		main(int argc, char **argv)
 	data = read_data(po.errors);
 	if (data)
 	{
-		if (po.bt)
+		if (po.bt && bt_condition(data))
 			paths = wrap_backtracking(data);
 		if (!paths)
 			paths = get_paths(data);
@@ -456,12 +439,13 @@ int		main(int argc, char **argv)
 			{
 				if (po.h && data->input[i])
 					ft_printf("\033[38;5;35m%s\033[m\n", data->input[i]);
-				else
+				else if (data->input[i])
 					ft_printf("%s\n", data->input[i]);
 				++i;
 			}
 			ft_putchar('\n');
-			ft_lstmap(paths, copy_paths);
+			// leak
+			paths = ft_lstmap(paths, copy_rebased_paths);
 			aop = ft_memalloc(ft_lstlen(paths) * sizeof(int));
 			moves = make_them_run(data, paths, &po, aop);
 			if (po.s)

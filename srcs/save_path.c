@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/10 15:15:51 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/03 19:31:21 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/06 19:44:48 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ void		save_path(t_lmdata *data, t_list **path)
 	idx_cur = idx_end;
 	while (idx_cur != -1)
 	{
-		//n = clone_node(data->adj[idx_cur]);
-		n = ft_lstnew_cc(data->adj[idx_cur]->content, sizeof(t_node));
+		n = ft_lstnew_cc(dup_node(data->adj[idx_cur]->content), sizeof(t_node));
 		ft_lstadd(path, n);
 		idx_cur = ((t_node*)data->adj[idx_cur]->content)->p;
 	}

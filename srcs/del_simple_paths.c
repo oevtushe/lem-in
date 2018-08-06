@@ -1,29 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   del_node.c                                         :+:      :+:    :+:   */
+/*   del_simple_paths.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/13 16:44:07 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/06 19:20:01 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/08/06 19:13:04 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/08/06 19:20:39 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-void	del_node(void *content, size_t content_size)
+void		del_simple_paths(void *content, size_t content_size)
 {
-	t_node	*node;
+	t_list *path;
 
 	content_size = 0;
-	node = (t_node*)content;
-	ft_strdel(&node->name);
-	ft_memdel(&content);
-}
-
-void	free_node(t_node **node)
-{
-	ft_strdel(&(*node)->name);
-	ft_memdel((void**)node);
+	path = (t_list *)content;
+	ft_lstdel(&path, del_node);
 }
