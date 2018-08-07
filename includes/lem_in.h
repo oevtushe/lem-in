@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:31:45 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/07 11:35:46 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/07 15:38:08 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define LEM_IN_H
 
 # include "ft_printf.h"
-# include "get_next_line.h"
 # include "lm_errs.h"
 
 # define BC_STOP 100
