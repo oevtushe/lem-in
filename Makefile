@@ -6,7 +6,7 @@
 #    By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/12 10:30:58 by oevtushe          #+#    #+#              #
-#    Updated: 2018/08/06 19:31:35 by oevtushe         ###   ########.fr        #
+#    Updated: 2018/08/07 10:38:31 by oevtushe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -96,6 +96,7 @@ LN_SRCF				:= main.c					\
 					   del_simple_paths.c		\
 					   node_utils.c				\
 					   map_path_list.c			\
+					   del_int.c				\
 					   new_data.c
 LN_DEPF				:= lem_in.h lm_errs.h
 

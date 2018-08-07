@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:27:51 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/06 18:57:58 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/07 11:54:53 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,10 +176,10 @@ void	print_ants(t_list *paths, t_pair *extra, t_po *po)
 			{
 				if (spc)
 					ft_putchar(' ');
-				if (po->h && ft_lstgetidx((t_list *)extra->fst, ((t_node *)lst->content)->name, cmp_lst_str) != -1 && 
+				if (po->p && ft_lstgetidx((t_list *)extra->fst, ((t_node *)lst->content)->name, cmp_lst_str) != -1 && 
 						!ft_strequ(((t_node *)lst->content)->name, ((t_node *)((t_list *)extra->scd)->content)->name))
 					ft_printf("%s%sL%d-%s%s", BOLD, GREEN, ((t_node *)lst->content)->ant, ((t_node *)lst->content)->name, RESET);
-				else if (po->h && ft_strequ(((t_node *)lst->content)->name, ((t_node *)((t_list *)extra->scd)->content)->name))
+				else if (po->p && ft_strequ(((t_node *)lst->content)->name, ((t_node *)((t_list *)extra->scd)->content)->name))
 					ft_printf("%s\033[38;5;196mL%d-%s\033[m", BOLD, ((t_node *)lst->content)->ant, ((t_node *)lst->content)->name);
 				else
 					ft_printf("\033[38;5;%dmL%d-%s\033[m", path->color, ((t_node *)lst->content)->ant, ((t_node *)lst->content)->name);
@@ -261,23 +261,23 @@ int		set_option(void *container, char option)
 	po = (t_po *)container;
 	if (option == 'e')
 	{
-		po->errors = 1;
+		po->e = 1;
 		res = 1;
 	}
 	else if (option == 'o')
 	{
-		po->bt = 1;
+		po->o = 1;
 		res = 1;
 	}
 	else if (option == 'p')
 	{
-		po->h = 1;
+		po->p = 1;
 		res = 1;
 	}
 	else if (option == 's')
 	{
 		po->s = 1;
-		po->h = 1;
+		po->p = 1;
 		res = 1;
 	}
 	return (res);
@@ -374,19 +374,21 @@ void	rebase_paths(t_list *paths)
 	t_list	*colors;
 	int		def_one;
 
-	def_one = 125; // ?
+	def_one = 196;
 	colors = ft_lstnew(&def_one, sizeof(int));
 	while (paths)
 	{
 		p = (t_path *)ft_memalloc(sizeof(t_path));
 		p->list = paths->content;
 		p->color = gen_color(colors);
+		ft_lstadd(&colors, ft_lstnew(&p->color, sizeof(int)));
 		paths->content = p;
 		paths = paths->next;
 	}
+	ft_lstdel(&colors, del_int);
 }
 
-int		bt_condition(t_lmdata *data)
+int		bt_extra_check(t_lmdata *data)
 {
 	int res;
 
@@ -399,71 +401,83 @@ int		bt_condition(t_lmdata *data)
 	return (res);
 }
 
+void	print_input(char **input, int size, int p)
+{
+	int		i;
+
+	i = 0;
+	while (i < size)
+	{
+		if (p && input[i])
+			ft_printf("\033[38;5;35m%s\033[m\n", input[i]);
+		else if (input[i])
+			ft_printf("%s\n", input[i]);
+		++i;
+	}
+	ft_putchar('\n');
+}
+
+void	mk_output(t_lmdata *data, t_po *po, t_list **paths)
+{
+	int		*aop;
+	int		moves;
+	time_t	tm;
+
+	srand((unsigned int)time(&tm));
+	rebase_paths(*paths);
+	print_input(data->input, data->inp_size, po->p);
+	*paths = ft_lstmap(*paths, copy_rebased_paths);
+	aop = ft_memalloc(ft_lstlen(*paths) * sizeof(int));
+	moves = make_them_run(data, *paths, po, aop);
+	if (po->s)
+	{
+		ft_putchar('\n');
+		pdecode_paths(*paths, aop);
+		ft_printf("\n%sMoves%s: %d\n", ORANGE, RESET, moves);
+	}
+}
+
+void	print_usage(void)
+{
+	ft_printf("Usage: \n"
+			"-e -> extended error printing\n"
+			"-p -> pretty output\n"
+			"-s -> statistics (turns on -p too)\n"
+			"-o -> use some kind of optimization for path searching\n");
+}
+
 int		main(int argc, char **argv)
 {
-	int			i;
 	t_list		*paths;
 	t_err		*err;
 	t_lmdata	*data;
 	t_po		po;
-	int			*aop;
-	int			moves;
-	time_t		tm;
 
-	i = 0;
 	paths = NULL;
 	err = NULL;
-	po.errors = 0;
-	po.bt = 0;
+	ft_memset(&po, 0, sizeof(t_po));
 	if (argc > 1 && !ft_argsparser(&argv[1], argc - 1, (void *)&po, set_option))
 	{
-		ft_printf("Usage: \n-o -> use some kind of optimization for path searching\n"
-				"-e -> extended error printing\n"
-				"-p -> pretty output\n"
-				"-s -> statistics (turns on -p too)\n");
+		print_usage();
 		return (-42);
 	}
-	data = read_data(po.errors);
+	data = read_data(&err);
 	if (data)
 	{
-		if (po.bt && bt_condition(data))
+		if (po.o && bt_extra_check(data))
 			paths = wrap_backtracking(data);
 		if (!paths)
 			paths = get_paths(data);
-		srand((unsigned int)time(&tm));
-		//
-		rebase_paths(paths);
 		if (paths)
-		{
-			while (i < data->inp_size)
-			{
-				if (po.h && data->input[i])
-					ft_printf("\033[38;5;35m%s\033[m\n", data->input[i]);
-				else if (data->input[i])
-					ft_printf("%s\n", data->input[i]);
-				++i;
-			}
-			ft_putchar('\n');
-			// leak
-			paths = ft_lstmap(paths, copy_rebased_paths);
-			aop = ft_memalloc(ft_lstlen(paths) * sizeof(int));
-			moves = make_them_run(data, paths, &po, aop);
-			if (po.s)
-			{
-				ft_putchar('\n');
-				pdecode_paths(paths, aop);
-				ft_printf("\n%sMoves%s: %d\n", ORANGE, RESET, moves);
-			}
-		}
+			mk_output(data, &po, &paths);
 		else
 		{
 			err = raise_data_no_path();
-			if (err)
-			{
-				error_handler(err, po.errors);
-				return (0);
-			}
+			error_handler(err, po.e);
+			return (-47);
 		}
 	}
+	else
+		error_handler(err, po.e);
 	return (0);
 }

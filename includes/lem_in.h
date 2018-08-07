@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:31:45 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/06 19:31:25 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/07 11:35:46 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,13 @@ typedef struct	s_rdata
 {
 	int 	cmd_mode;
 	int		data_type;
-	t_err	*err;
 }				t_rdata;
 
 typedef struct	s_po
 {
-	int errors;
-	int bt;
-	int h;
+	int e;
+	int o;
+	int p;
 	int	s;
 }				t_po;
 
@@ -112,7 +111,7 @@ t_err		*parse_room(char *line, t_lmdata *data, int cmd_mode, t_pair *extra);
 t_err		*parse_command(char *line, int *cmd_mode, t_pair *extra);
 
 int			cmp_lst_str(void *elem, void *data);
-t_lmdata	*read_data(int errors);
+t_lmdata	*read_data(t_err **err);
 t_err		*read_ants(int *ants);
 void		print_paths(t_list *paths);
 t_list		*copy_rebased_paths(t_list *path_lst);
@@ -120,6 +119,7 @@ t_list		*copy_simple_paths(t_list *paths_node);
 void		del_simple_paths(void *content, size_t content_size);
 t_node		*dup_node(t_node *room);
 t_list		*map_path_list(t_list *elem);
+void		del_int(void *content, size_t content_size);
 
 /*
 ** For tests
