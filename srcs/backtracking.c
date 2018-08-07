@@ -6,18 +6,11 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/14 09:51:57 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/06 19:54:16 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/07 16:46:11 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
-
-static int	cmp_str_str(void *cn, void *sn)
-{
-	if (ft_strequ((char *)cn, sn))
-		return (1);
-	return (0);
-}
 
 void		find_path(t_lmdata *data, t_source *source, t_list **path)
 {

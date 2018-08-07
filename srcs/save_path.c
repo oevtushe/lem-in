@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/10 15:15:51 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/06 19:44:48 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/07 18:33:14 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void		save_path(t_lmdata *data, t_list **path)
 
 	((t_node*)((t_list*)data->extra->fst)->content)->p = -1;
 	end = (t_node*)((t_list*)data->extra->scd)->content;
-	/* no path between start and end */
 	if (end->d == -1)
 		return ;
 	idx_start = get_node_idx(data, ((t_node*)((t_list*)data->extra->fst)->content)->name);

@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:27:51 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/07 11:54:53 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/07 16:53:51 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,19 @@ int		move_ants(t_lmdata *data, t_list *paths, int *al, int *aop)
 	return (sm);
 }
 
+void	print_ant(t_list *lst, t_pair *extra, t_po *po, t_path *path)
+{
+	if (po->p && ft_lstgetidx((t_list *)extra->fst, ((t_node *)lst->content)->name, cmp_lst_str) != -1 && 
+			!ft_strequ(((t_node *)lst->content)->name, ((t_node *)((t_list *)extra->scd)->content)->name))
+		ft_printf("%s%sL%d-%s%s", BOLD, GREEN, ((t_node *)lst->content)->ant, ((t_node *)lst->content)->name, RESET);
+	else if (po->p && ft_strequ(((t_node *)lst->content)->name, ((t_node *)((t_list *)extra->scd)->content)->name))
+		ft_printf("%s\033[38;5;196mL%d-%s\033[m", BOLD, ((t_node *)lst->content)->ant, ((t_node *)lst->content)->name);
+	else if (po->p)
+		ft_printf("\033[38;5;%dmL%d-%s\033[m", path->color, ((t_node *)lst->content)->ant, ((t_node *)lst->content)->name);
+	else
+		ft_printf("L%d-%s", ((t_node *)lst->content)->ant, ((t_node *)lst->content)->name);
+}
+
 /*
 ** Function cycles through the paths list and prints moved ants in the following
 ** order:
@@ -176,13 +189,7 @@ void	print_ants(t_list *paths, t_pair *extra, t_po *po)
 			{
 				if (spc)
 					ft_putchar(' ');
-				if (po->p && ft_lstgetidx((t_list *)extra->fst, ((t_node *)lst->content)->name, cmp_lst_str) != -1 && 
-						!ft_strequ(((t_node *)lst->content)->name, ((t_node *)((t_list *)extra->scd)->content)->name))
-					ft_printf("%s%sL%d-%s%s", BOLD, GREEN, ((t_node *)lst->content)->ant, ((t_node *)lst->content)->name, RESET);
-				else if (po->p && ft_strequ(((t_node *)lst->content)->name, ((t_node *)((t_list *)extra->scd)->content)->name))
-					ft_printf("%s\033[38;5;196mL%d-%s\033[m", BOLD, ((t_node *)lst->content)->ant, ((t_node *)lst->content)->name);
-				else
-					ft_printf("\033[38;5;%dmL%d-%s\033[m", path->color, ((t_node *)lst->content)->ant, ((t_node *)lst->content)->name);
+				print_ant(lst, extra, po, path);
 				((t_node *)lst->content)->fresh = 0;
 				c = 1;
 				spc = 1;
@@ -236,20 +243,6 @@ void	normalize(t_lmdata *data, t_list **paths)
 		r = r->next;
 	}
 	ft_lstcorder(paths);
-}
-
-int		cmp_len(void *a, void *b)
-{
-	size_t	len1;
-	size_t	len2;
-
-	len1 = ft_lstlen((t_list *)a);
-	len2 = ft_lstlen((t_list *)b);
-	if (len1 > len2)
-		return (1);
-	else if (len1 < len2)
-		return (-1);
-	return (0);
 }
 
 int		set_option(void *container, char option)

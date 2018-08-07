@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/14 09:54:45 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/30 18:35:36 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/07 18:32:20 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,10 @@ char	*check_overlapping(t_lmdata *data, t_list *paths, t_list *path)
 	idx = -1;
 	while (paths)
 	{
-		// ignore end
 		old_nodes = ((t_list*)paths->content)->next;
 		while (old_nodes)
 		{
 			idx = get_node_idx(data, ((t_node *)old_nodes->content)->name);
-			// ignore end
 			new_nodes = path->next;
 			while (new_nodes)
 			{

@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:31:45 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/07 15:38:08 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/07 18:24:54 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,11 @@ t_err		*parse_link(char *line, t_lmdata *data);
 t_err		*parse_room(char *line, t_lmdata *data, int cmd_mode, t_pair *extra);
 t_err		*parse_command(char *line, int *cmd_mode, t_pair *extra);
 
+int			cmp_len(void *a, void *b);
 int			cmp_lst_str(void *elem, void *data);
+int			cmp_lst_str(void *elem, void *data);
+int			cmp_str_str(void *cn, void *sn);
+
 t_lmdata	*read_data(t_err **err);
 t_err		*read_ants(int *ants);
 void		print_paths(t_list *paths);
@@ -119,6 +123,12 @@ void		del_simple_paths(void *content, size_t content_size);
 t_node		*dup_node(t_node *room);
 t_list		*map_path_list(t_list *elem);
 void		del_int(void *content, size_t content_size);
+
+void		free_lmdata(t_lmdata **data);
+void		do_err(t_err **err, t_lmdata *data, int i);
+void		do_cmd_inv(int cmd_mode, char **line, t_err **err);
+void		li_handler(t_err *err, char **input, int size);
+void		further_handlers(t_err **err, t_pair *extra);
 
 /*
 ** For tests

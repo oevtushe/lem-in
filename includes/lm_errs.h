@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/20 17:55:17 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/02 11:45:45 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/07 18:24:11 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,9 @@ typedef struct	s_err_dsp
 }				t_err_dsp;
 
 void		error_handler(t_err *err, int errors);
-int			cmp_simple(void *elem, void *data);
 //int			find_in_pinput(char **input, int size, char *line);
 t_err 		*new_err(int err_code, void *extra, size_t extra_len);
+int			cmp_simple(void *elem, void *data);
 
 void		li_room_double_def(t_err *err, char **input, int size);
 void		li_cmd_double(t_err *err, char **input, int size);

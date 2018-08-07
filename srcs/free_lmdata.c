@@ -1,20 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmp_lst_str.c                                      :+:      :+:    :+:   */
+/*   free_lmdata.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/08/01 16:44:11 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/03 15:38:27 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/08/07 18:14:02 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/08/07 18:16:16 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-int	cmp_lst_str(void *elem, void *data)
+static void	free_adj(void *content)
 {
-	if (ft_strequ(((t_node *)elem)->name, (char *)data))
-		return (1);
-	return (0);
+	t_node *node;
+
+	node = (t_node *)(((t_list *)content)->content);
+	ft_strdel(&node->name);
+}
+
+void	free_lmdata(t_lmdata **data)
+{
+	ft_freepa_sd((void ***)&(*data)->input, (*data)->inp_size);
+	ft_freepa((void ***)&(*data)->adj, (*data)->adj_cs, free_adj);
+	ft_memdel((void **)&(*data)->extra);
+	ft_memdel((void **)data);
 }
