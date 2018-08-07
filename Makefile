@@ -6,12 +6,14 @@
 #    By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/12 10:30:58 by oevtushe          #+#    #+#              #
-#    Updated: 2018/08/07 16:00:15 by oevtushe         ###   ########.fr        #
+#    Updated: 2018/08/07 19:34:54 by oevtushe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 include				Lem-in.mk
 include				$(FT_DIR)/Templates.mk
+
+CFLAGS	+= -g
 
 all: $(LN_NAME)
 

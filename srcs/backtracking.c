@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/14 09:51:57 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/07 16:46:11 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/07 19:47:04 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	operate_paths(t_pair *paths, t_list *path)
 	ft_lstdel(&path, del_node);
 	ft_lstadd((t_list**)&paths->scd, ft_lstnew_cc(cpath, sizeof(t_list)));
 	if (ft_lstlen((t_list*)paths->scd) > ft_lstlen((t_list*)paths->fst))
-		paths->fst = ft_lstmap(paths->scd, copy_simple_paths);
+		paths->fst = ft_lstmap(paths->scd, map_simple_paths);
 }
 
 int		overlap_case_n_limit(t_lmdata *data, t_pair *paths, t_list *path, t_pair *extra)

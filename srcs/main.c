@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:27:51 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/07 16:53:51 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/07 19:49:45 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,7 +238,7 @@ void	normalize(t_lmdata *data, t_list **paths)
 	while (r)
 	{
 		ft_lstcorder((t_list **)&r->content);
-		n = clone_node(data->adj[idx]);
+		n = ft_lstnew_cc(dup_node(data->adj[idx]->content), sizeof(t_node));
 		ft_lstadd((t_list **)&r->content, n);
 		r = r->next;
 	}
@@ -300,7 +300,6 @@ t_list	*wrap_backtracking(t_lmdata *data)
 	data->extra->fst = extra.fst;
 	data->extra->scd = extra.scd;
 	paths = pair.fst;
-	print_paths(paths);
 	normalize(data, &paths);
 	size = ft_lstlen(paths);
 	arr = ft_lsttoarr(paths);
@@ -419,7 +418,8 @@ void	mk_output(t_lmdata *data, t_po *po, t_list **paths)
 	srand((unsigned int)time(&tm));
 	rebase_paths(*paths);
 	print_input(data->input, data->inp_size, po->p);
-	*paths = ft_lstmap(*paths, copy_rebased_paths);
+	// here
+	//*paths = ft_lstmap(*paths, copy_rebased_paths);
 	aop = ft_memalloc(ft_lstlen(*paths) * sizeof(int));
 	moves = make_them_run(data, *paths, po, aop);
 	if (po->s)
@@ -428,6 +428,7 @@ void	mk_output(t_lmdata *data, t_po *po, t_list **paths)
 		pdecode_paths(*paths, aop);
 		ft_printf("\n%sMoves%s: %d\n", ORANGE, RESET, moves);
 	}
+	ft_memdel((void **)&aop);
 }
 
 void	print_usage(void)
@@ -469,8 +470,11 @@ int		main(int argc, char **argv)
 			error_handler(err, po.e);
 			return (-47);
 		}
+		free_lmdata(&data);
+		ft_lstdel(&paths, del_rebased_paths);
 	}
 	else
 		error_handler(err, po.e);
+	system("leaks lem-in");
 	return (0);
 }

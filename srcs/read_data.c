@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 16:10:48 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/07 18:20:03 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/07 18:49:12 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static void	parse(t_lmdata **data, char **line, t_rdata *rdata, t_err **err)
 		*err = raise_cmd_bad_using(*line);
 	else if (!*err)
 		*err = new_err(ERR_PASS_FURTHER, NULL, 0);
+	ft_parrdel_zt((void ***)&arr);
 }
 
 static void	init_data(t_lmdata **data, char **line, t_rdata *rdata)

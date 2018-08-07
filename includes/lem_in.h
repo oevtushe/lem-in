@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:31:45 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/07 18:24:54 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/07 19:46:35 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ t_lmdata	*read_data(t_err **err);
 t_err		*read_ants(int *ants);
 void		print_paths(t_list *paths);
 t_list		*copy_rebased_paths(t_list *path_lst);
-t_list		*copy_simple_paths(t_list *paths_node);
+t_list		*map_simple_paths(t_list *paths_node);
 void		del_simple_paths(void *content, size_t content_size);
 t_node		*dup_node(t_node *room);
 t_list		*map_path_list(t_list *elem);
@@ -129,6 +129,7 @@ void		do_err(t_err **err, t_lmdata *data, int i);
 void		do_cmd_inv(int cmd_mode, char **line, t_err **err);
 void		li_handler(t_err *err, char **input, int size);
 void		further_handlers(t_err **err, t_pair *extra);
+void		del_rebased_paths(void *content, size_t content_size);
 
 /*
 ** For tests
