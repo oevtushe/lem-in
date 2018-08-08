@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/20 18:46:28 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/01 19:08:53 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 18:40:28 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	li_link_double(t_err *err, char **input, int size)
 	cl = ft_strjoin((char *)((t_pair*)err->extra)->fst, "-");
 	ft_strconnect(&cl, (char *)((t_pair*)err->extra)->scd, 1);
 	i = ft_arrgetidx((void **)input, size, cl, cmp_simple);
-	// connect string in second order
 	if (i == -1 || i == (size - 1))
 	{
 		ft_strdel(&cl);
@@ -65,10 +64,5 @@ char	*hlr_link_double(void **extra, int line)
 			UNDERLINE, CYAN, RESET, BOLD, line, RESET, RED,
 			(char *)p2->fst, RESET, RED, (char *)p2->scd,
 			RESET, BOLD, *(int*)p1->fst, RESET);
-	ft_strdel((char **)&p2->fst);
-	ft_strdel((char **)&p2->scd);
-	ft_memdel((void **)&p1->scd);
-	ft_memdel((void **)&p1->fst);
-	ft_memdel((void **)extra);
 	return (err_msg);
 }

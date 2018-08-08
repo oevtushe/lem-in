@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/20 18:46:28 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/23 16:47:13 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 18:40:11 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ t_err	*raise_data_empty(void)
 	return (err);
 }
 
-char *hlr_data_empty(void **extra, int line)
+char	*hlr_data_empty(void **extra, int line)
 {
 	size_t	ln;
 	char	*err_msg;
 
 	line = 0;
 	extra = NULL;
-	err_msg = ft_format("%s%sError%s: No input data\n", 
+	err_msg = ft_format("%s%sError%s: No input data\n",
 			&ln, UNDERLINE, CYAN, RESET);
 	return (err_msg);
 }

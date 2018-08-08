@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/20 18:46:28 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/23 16:47:17 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 18:40:15 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ t_err	*raise_data_no_start(void)
 	return (err);
 }
 
-char *hlr_data_no_start(void **extra, int line)
+char	*hlr_data_no_start(void **extra, int line)
 {
 	size_t	ln;
 	char	*err_msg;
 
 	line = 0;
 	extra = NULL;
-	err_msg = ft_format("%s%sError%s: no start defined\n",
-			&ln, UNDERLINE, CYAN, RESET);
+	err_msg = ft_format("%s%sError%s: no %sstart%s defined\n",
+			&ln, UNDERLINE, CYAN, RESET, GREEN, RESET);
 	return (err_msg);
 }

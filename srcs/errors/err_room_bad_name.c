@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/20 18:46:28 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/23 16:47:34 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 18:40:54 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,5 @@ char	*hlr_room_bad_name(void **extra, int line)
 				&ln, UNDERLINE, CYAN, RESET, BOLD, line, RESET,\
 				RED, (char*)*extra, RESET,\
 				RED, ((char*)*extra)[0], RESET);
-	ft_strdel((char **)extra);
 	return (err_msg);
 }

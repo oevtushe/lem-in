@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/14 10:04:01 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/03 11:21:11 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 15:31:09 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,13 @@ void	pdecode_paths(t_list *paths, int *aop)
 		lst = path->list;
 		ft_printf("%sAnts count%s: %d\n", YELLOW, RESET, aop[i++]);
 		ft_printf("%sPath len%s: %d\n", YELLOW, RESET, ft_lstlen(lst));
-		ft_printf("\033[38;5;%dm%s\033[m", path->color, ((t_node *)lst->content)->name);
+		ft_printf("\033[38;5;%dm%s\033[m", path->color,
+				((t_node *)lst->content)->name);
 		lst = lst->next;
 		while (lst)
 		{
-			ft_printf("->\033[38;5;%dm%s\033[m", path->color, ((t_node *)lst->content)->name);
+			ft_printf("->\033[38;5;%dm%s\033[m",
+					path->color, ((t_node *)lst->content)->name);
 			lst = lst->next;
 		}
 		paths = paths->next;

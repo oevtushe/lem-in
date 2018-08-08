@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 16:10:48 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/07 18:49:12 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 18:45:43 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ static void	parse(t_lmdata **data, char **line, t_rdata *rdata, t_err **err)
 	{
 		if (rdata->cmd_mode)
 			*err = raise_cmnt_after_cmd(*line);
-		return ;
 	}
 	else if (rdata->data_type == 0 && arr[0] && !ft_strchr(arr[0], '-') &&
 			!(*err = parse_room(*line, *data,
@@ -51,10 +50,20 @@ static void	init_data(t_lmdata **data, char **line, t_rdata *rdata)
 	ft_realloc((void **)&(*data)->input, 0, sizeof(void *) * (*data)->inp_size);
 }
 
+static void	finalize(t_lmdata **data, t_err **err)
+{
+	if (*err || !(*data)->extra->fst || !(*data)->extra->scd)
+		do_err(err, *data, (*data)->inp_size);
+	else
+		ft_realloc((void **)&(*data)->input,
+				(*data)->inp_size * sizeof(void *),
+				(*data)->inp_size * sizeof(void *));
+}
+
 t_lmdata	*read_data(t_err **err)
 {
 	int			i;
-	char 		*line;
+	char		*line;
 	t_rdata		rdata;
 	t_lmdata	*data;
 
@@ -75,11 +84,6 @@ t_lmdata	*read_data(t_err **err)
 		data->input[i++] = line;
 	}
 	data->inp_size = i;
-	if (*err || !data->extra->fst || !data->extra->scd)
-	{
-		do_err(err, data, i);
-		free_lmdata(&data);
-	}
-	ft_realloc((void **)&data->input, i * sizeof(void *), i * sizeof(void *));
+	finalize(&data, err);
 	return (data);
 }

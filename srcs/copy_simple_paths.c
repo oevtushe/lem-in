@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/06 18:58:55 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/07 19:46:00 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 16:26:17 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static t_list	*dup_path(t_list *elem)
 	return (new);
 }
 
-t_list	*map_simple_paths(t_list *paths_node)
+t_list			*map_simple_paths(t_list *paths_node)
 {
 	t_list *copy;
 	t_list *cpath;

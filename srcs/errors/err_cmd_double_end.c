@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/20 18:46:27 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/23 16:46:54 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 18:39:48 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,5 @@ char	*hlr_cmd_double_end(void **extra, int line)
 	err_msg = ft_format("%s%sError%s:%s%d%s: %send%s is already defined "
 			"in line %s%d%s\n", &ln, UNDERLINE, CYAN, RESET, BOLD,
 			line, RESET, GREEN, RESET, BOLD, *(int*)*extra, RESET);
-	ft_memdel((void **)extra);
 	return (err_msg);
 }

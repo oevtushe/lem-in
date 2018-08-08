@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/20 18:46:28 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/01 11:51:46 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 18:40:16 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_err	*raise_data_no_start_end(void)
 	return (err);
 }
 
-char *hlr_data_no_start_end(void **extra, int line)
+char	*hlr_data_no_start_end(void **extra, int line)
 {
 	size_t	ln;
 	char	*err_msg;

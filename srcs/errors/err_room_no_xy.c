@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/20 18:46:28 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/23 16:47:43 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 18:41:20 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,5 @@ char	*hlr_room_no_xy(void **extra, int line)
 			"not specified '%s%s%s'\n", &ln, UNDERLINE, CYAN, RESET, BOLD,
 			line, RESET, GREEN, RESET, GREEN, RESET, RED,\
 			(char *)*extra, RESET);
-	ft_strdel((char **)extra);
 	return (err_msg);
 }

@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 18:15:57 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/07 18:17:29 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 16:41:18 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	further_handlers(t_err **err, t_pair *extra)
 {
 	if (!extra->fst && !extra->scd)
 		*err = raise_data_no_start_end();
-	else if  (!extra->fst)
+	else if (!extra->fst)
 		*err = raise_data_no_start();
 	else if (!extra->scd)
 		*err = raise_data_no_end();

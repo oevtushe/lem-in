@@ -1,34 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew_cc.c                                     :+:      :+:    :+:   */
+/*   read_ants.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/30 15:45:08 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/30 16:06:14 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/08/08 10:46:32 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/08/08 10:46:38 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-/*
-** Function creates new node with specified content and
-** content_size, but content won't be copied, it will
-** point at passed one
-**
-** Suffix 'cc' means catch content
-*/
-
-t_list	*ft_lstnew_cc(void *content, size_t content_size)
+t_err	*read_ants(int *ants)
 {
-	t_list *node;
+	char		*line;
+	t_err_code	st;
+	t_err		*err;
 
-	node = (t_list *)ft_memalloc(sizeof(t_list));
-	if (node)
+	st = ERR_DATA_EMPTY;
+	err = NULL;
+	line = NULL;
+	if (get_next_line(0, &line))
 	{
-		node->content = content;
-		node->content_size = content_size;
+		if (ft_isvldint(line) && line[0] != '-')
+		{
+			*ants = ft_atoi(line);
+			if (*ants)
+				st = ERR_NONE;
+		}
+		if (st != ERR_NONE)
+			err = raise_ants_inv_num(line);
+		ft_strdel(&line);
 	}
-	return (node);
+	if (!err && st == ERR_DATA_EMPTY)
+		err = raise_data_empty();
+	return (err);
 }

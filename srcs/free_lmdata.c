@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 18:14:02 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/07 19:29:27 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 18:43:55 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,13 @@ static void	free_adj(void *content)
 	ft_lstdel(&lst, del_empty_node);
 }
 
-void	free_lmdata(t_lmdata **data)
+void		free_lmdata(t_lmdata **data)
 {
-	ft_freepa_sd((void ***)&(*data)->input, (*data)->inp_size);
-	ft_freepa((void ***)&(*data)->adj, (*data)->adj_cs, free_adj);
-	ft_memdel((void **)&(*data)->extra);
-	ft_memdel((void **)data);
+	if (data && *data)
+	{
+		ft_freepa_sd((void ***)&(*data)->input, (*data)->inp_size);
+		ft_freepa((void ***)&(*data)->adj, (*data)->adj_cs, free_adj);
+		ft_memdel((void **)&(*data)->extra);
+		ft_memdel((void **)data);
+	}
 }

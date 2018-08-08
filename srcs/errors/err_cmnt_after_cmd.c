@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 10:58:48 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/01 11:08:29 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 18:39:55 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ char	*hlr_cmnt_after_cmd(void **extra, int line)
 	size_t	ln;
 	char	*err_msg;
 
-	err_msg = ft_format("%s%sError%s:%s%d%s: %scomments%s aren't allowed straight after %scmd%s definition"
+	err_msg = ft_format("%s%sError%s:%s%d%s: %scomments%s"
+			" aren't allowed straight after %scmd%s definition"
 			" '%s%s%s'\n", &ln, UNDERLINE, CYAN, RESET, BOLD,
 			line, RESET, GREEN, RESET, GREEN, RESET, RED, *extra, RESET);
-	ft_strdel((char **)extra);
 	return (err_msg);
 }

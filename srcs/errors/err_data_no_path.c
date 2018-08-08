@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/24 10:52:04 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/24 11:06:37 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 18:40:13 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*hlr_data_no_path(void **extra, int line)
 	extra = NULL;
 	line = 0;
 	err_msg = ft_format("%s%sError%s: no path between "
-			"%sstart%s and %send%s\n", &ln, UNDERLINE, CYAN, RESET, 
+			"%sstart%s and %send%s\n", &ln, UNDERLINE, CYAN, RESET,
 			GREEN, RESET, GREEN, RESET);
 	return (err_msg);
 }

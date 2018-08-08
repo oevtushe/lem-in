@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/20 18:46:28 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/23 16:47:32 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 18:40:50 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,5 @@ char	*hlr_room_bad_coord(void **extra, int line)
 			"and '%s%s%s'\n", &ln, UNDERLINE, CYAN, RESET, BOLD, line,
 			RESET, RED, (char*)p->fst, RESET, RED,
 			(char*)p->scd, RESET);
-	ft_strdel((char **)&p->fst);
-	ft_strdel((char **)&p->scd);
-	ft_memdel(extra);
 	return (err_msg);
 }

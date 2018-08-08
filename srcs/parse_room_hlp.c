@@ -1,21 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   add_node_to_blacklist.c                            :+:      :+:    :+:   */
+/*   parse_room_hlp.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/26 16:09:13 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/30 18:43:34 by oevtushe         ###   ########.fr       */
+/*   Created: 2018/08/08 15:40:56 by oevtushe          #+#    #+#             */
+/*   Updated: 2018/08/08 15:41:09 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-void	add_node_to_blacklist(t_list **black_list, char *o)
+t_err	*gen_bad_coord_err(char *num1, char *num2)
 {
-	t_list *node;
+	t_err	*err;
 
-	node = ft_lstnew(o, sizeof(char) * (ft_strlen(o) + 1));
-	ft_lstappend(black_list, node);
+	err = NULL;
+	if (!ft_isvldint(num1) && !ft_isvldint(num2))
+		err = raise_room_bad_coord(num1, num2);
+	else if (!ft_isvldint(num1))
+		err = raise_room_bad_x(num1);
+	else if (!ft_isvldint(num2))
+		err = raise_room_bad_y(num2);
+	return (err);
 }

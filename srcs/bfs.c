@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/10 15:54:47 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/07 18:31:49 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 16:24:59 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static void	set_node(t_list *v, t_list **queue, int ud, int idx_u)
 	((t_node*)v->content)->visited = 1;
 }
 
-void		bfs(t_lmdata *data, t_list *start, t_list *black_list, int (*check)(void *, void *))
+void		bfs(t_lmdata *data, t_list *start,
+		t_list *black_list, int (*check)(void *, void *))
 {
 	t_list	*queue;
 	t_node	*u;

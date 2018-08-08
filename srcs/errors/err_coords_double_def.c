@@ -6,13 +6,13 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 18:52:11 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/02 12:33:07 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 18:40:09 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lm_errs.h"
 
-int		check_coords(void *elem, void *data)
+static int	check_coords(void *elem, void *data)
 {
 	char	*e;
 	char	*d;
@@ -27,7 +27,7 @@ int		check_coords(void *elem, void *data)
 	return (0);
 }
 
-void	li_coords_double_def(t_err *err, char **input, int size)
+void		li_coords_double_def(t_err *err, char **input, int size)
 {
 	int		i;
 	t_pair	*pair;
@@ -39,13 +39,14 @@ void	li_coords_double_def(t_err *err, char **input, int size)
 		++i;
 		pair = (t_pair*)ft_memalloc(sizeof(t_pair));
 		pair->fst = err->extra;
-		inner = ft_newpair(&i, sizeof(int), input[i - 1], ft_strlen(input[i - 1]) + 1);
+		inner = ft_newpair(&i, sizeof(int),
+				input[i - 1], ft_strlen(input[i - 1]) + 1);
 		pair->scd = inner;
 		err->extra = pair;
 	}
 }
 
-t_err	*raise_coords_double_def(char *x, char *y)
+t_err		*raise_coords_double_def(char *x, char *y)
 {
 	t_err	*err;
 	char	*comb;
@@ -57,7 +58,7 @@ t_err	*raise_coords_double_def(char *x, char *y)
 	return (err);
 }
 
-char	*hlr_coords_double_def(void **extra, int line)
+char		*hlr_coords_double_def(void **extra, int line)
 {
 	size_t	ln;
 	char	*err_msg;
@@ -72,10 +73,5 @@ char	*hlr_coords_double_def(void **extra, int line)
 			(char*)p1->fst, RESET, RED,
 			(char*)p2->scd, RESET, BOLD,
 			*(int*)p2->fst, RESET);
-	ft_memdel((void**)&p2->fst);
-	ft_strdel((char**)&p2->scd);
-	ft_memdel((void**)&p1->scd);
-	ft_strdel((char**)&p1->fst);
-	ft_memdel(extra);
 	return (err_msg);
 }

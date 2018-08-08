@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/10 15:15:51 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/07 18:33:14 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 15:43:56 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,15 @@ void		save_path(t_lmdata *data, t_list **path)
 	end = (t_node*)((t_list*)data->extra->scd)->content;
 	if (end->d == -1)
 		return ;
-	idx_start = get_node_idx(data, ((t_node*)((t_list*)data->extra->fst)->content)->name);
-	idx_end = get_node_idx(data, ((t_node*)((t_list*)data->extra->scd)->content)->name);
+	idx_start = get_node_idx(data,
+			((t_node*)((t_list*)data->extra->fst)->content)->name);
+	idx_end = get_node_idx(data,
+			((t_node*)((t_list*)data->extra->scd)->content)->name);
 	idx_cur = idx_end;
 	while (idx_cur != -1)
 	{
-		n = ft_lstnew_cc(dup_node(data->adj[idx_cur]->content), sizeof(t_node));
+		n = ft_lstnew_cc(dup_node(data->adj[idx_cur]->content),
+				sizeof(t_node));
 		ft_lstadd(path, n);
 		idx_cur = ((t_node*)data->adj[idx_cur]->content)->p;
 	}

@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/19 11:48:42 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/19 13:02:50 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 16:28:11 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	del(void *content, size_t content_size)
 ** Function deletes link between two nodes
 */
 
-void	del_link(t_lmdata *data, char *n1, char *n2)
+void		del_link(t_lmdata *data, char *n1, char *n2)
 {
 	int idx1;
 	int idx2;
@@ -37,7 +37,9 @@ void	del_link(t_lmdata *data, char *n1, char *n2)
 	idx2 = get_node_idx(data, n2);
 	if (idx1 >= 0 && idx2 >= 0)
 	{
-		ft_lstdelsafe(&data->adj[idx1], ((t_node*)data->adj[idx2]->content)->name, cmp, del);
-		ft_lstdelsafe(&data->adj[idx2], ((t_node*)data->adj[idx1]->content)->name, cmp, del);
+		ft_lstdelsafe(&data->adj[idx1],
+				((t_node*)data->adj[idx2]->content)->name, cmp, del);
+		ft_lstdelsafe(&data->adj[idx2],
+				((t_node*)data->adj[idx1]->content)->name, cmp, del);
 	}
 }

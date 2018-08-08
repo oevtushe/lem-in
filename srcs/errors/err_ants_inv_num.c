@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 10:50:05 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/01 10:51:00 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 18:39:41 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ char	*hlr_ants_inv_num(void **extra, int line)
 	size_t	ln;
 	char	*err_msg;
 
-	err_msg = ft_format("%s%sError%s:%s%d%s: number of ants must be a positive non-zero integer "
+	err_msg = ft_format("%s%sError%s:%s%d%s: "
+			"number of ants must be a positive non-zero integer "
 			"'%s%s%s'\n", &ln, UNDERLINE, CYAN, RESET, BOLD, line,
 			RESET, RED, (char*)*extra, RESET);
-	ft_strdel((char **)extra);
 	return (err_msg);
 }

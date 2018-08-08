@@ -6,13 +6,13 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/18 11:26:41 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/07/18 11:28:48 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 16:22:03 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-t_err *new_err(int err_code, void *extra, size_t extra_len)
+t_err	*new_err(int err_code, void *extra, size_t extra_len)
 {
 	t_err *err;
 

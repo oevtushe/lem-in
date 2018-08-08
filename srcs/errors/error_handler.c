@@ -6,13 +6,15 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/14 12:26:52 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/02 11:26:13 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/08 16:22:56 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lm_errs.h"
+#include <stdlib.h>
 
-t_err_dsp	*new_dsp_entry(int err_code, char *(*err_handler)(void **, int))
+static t_err_dsp	*new_dsp_entry(int err_code,
+		char *(*err_handler)(void **, int))
 {
 	t_err_dsp *entry;
 
@@ -25,7 +27,24 @@ t_err_dsp	*new_dsp_entry(int err_code, char *(*err_handler)(void **, int))
 	return (entry);
 }
 
-t_err_dsp	**init_dsp(void)
+static void			init_dsp_hlp(t_err_dsp **dsp)
+{
+	dsp[15] = new_dsp_entry(ERR_CMD_DOUBLE_START, hlr_cmd_double_start);
+	dsp[16] = new_dsp_entry(ERR_CMD_DOUBLE_END, hlr_cmd_double_end);
+	dsp[17] = new_dsp_entry(ERR_CMD_BAD_USING, hlr_cmd_bad_using);
+	dsp[18] = new_dsp_entry(ERR_DATA_EMPTY, hlr_data_empty);
+	dsp[19] = new_dsp_entry(ERR_DATA_NO_START, hlr_data_no_start);
+	dsp[20] = new_dsp_entry(ERR_DATA_NO_END, hlr_data_no_end);
+	dsp[21] = new_dsp_entry(ERR_DATA_NO_START_END, hlr_data_no_start_end);
+	dsp[22] = new_dsp_entry(ERR_ANTS_INV_NUM, hlr_ants_inv_num);
+	dsp[23] = new_dsp_entry(ERR_ROOM_SPACES, hlr_room_spaces);
+	dsp[24] = new_dsp_entry(ERR_DATA_NO_PATH, hlr_data_no_path);
+	dsp[25] = new_dsp_entry(ERR_EMPTY_LINE, hlr_empty_line);
+	dsp[26] = new_dsp_entry(ERR_CMNT_AFTER_CMD, hlr_cmnt_after_cmd);
+	dsp[27] = new_dsp_entry(ERR_COORDS_DOUBLE_DEF, hlr_coords_double_def);
+}
+
+t_err_dsp			**init_dsp(void)
 {
 	t_err_dsp **dsp;
 
@@ -44,24 +63,13 @@ t_err_dsp	**init_dsp(void)
 	dsp[11] = new_dsp_entry(ERR_LINK_DOUBLE, hlr_link_double);
 	dsp[12] = new_dsp_entry(ERR_LINK_UNS_DATA, hlr_link_uns_data);
 	dsp[13] = new_dsp_entry(ERR_LINK_SPACES, hlr_link_spaces);
-	dsp[14] = new_dsp_entry(ERR_LINK_NOT_EXISTING_ROOM, hlr_link_not_existing_room);
-	dsp[15] = new_dsp_entry(ERR_CMD_DOUBLE_START, hlr_cmd_double_start);
-	dsp[16] = new_dsp_entry(ERR_CMD_DOUBLE_END, hlr_cmd_double_end);
-	dsp[17] = new_dsp_entry(ERR_CMD_BAD_USING, hlr_cmd_bad_using);
-	dsp[18] = new_dsp_entry(ERR_DATA_EMPTY, hlr_data_empty);
-	dsp[19] = new_dsp_entry(ERR_DATA_NO_START, hlr_data_no_start);
-	dsp[20] = new_dsp_entry(ERR_DATA_NO_END, hlr_data_no_end);
-	dsp[21] = new_dsp_entry(ERR_DATA_NO_START_END, hlr_data_no_start_end);
-	dsp[22] = new_dsp_entry(ERR_ANTS_INV_NUM, hlr_ants_inv_num);
-	dsp[23] = new_dsp_entry(ERR_ROOM_SPACES, hlr_room_spaces);
-	dsp[24] = new_dsp_entry(ERR_DATA_NO_PATH, hlr_data_no_path);
-	dsp[25] = new_dsp_entry(ERR_EMPTY_LINE, hlr_empty_line);
-	dsp[26] = new_dsp_entry(ERR_CMNT_AFTER_CMD, hlr_cmnt_after_cmd);
-	dsp[27] = new_dsp_entry(ERR_COORDS_DOUBLE_DEF, hlr_coords_double_def);
+	dsp[14] = new_dsp_entry(ERR_LINK_NOT_EXISTING_ROOM,
+			hlr_link_not_existing_room);
+	init_dsp_hlp(dsp);
 	return (dsp);
 }
 
-void	error_handler(t_err *err, int errors)
+void				error_handler(t_err *err, int errors)
 {
 	int			i;
 	char		*err_msg;
@@ -86,4 +94,5 @@ void	error_handler(t_err *err, int errors)
 	}
 	else if (!errors && err_msg)
 		ft_printf("ERROR\n");
+	exit(47);
 }
