@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/23 16:44:14 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/08 18:41:28 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/09 09:44:06 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,6 @@ char	*hlr_room_spaces(void **extra, int line)
 			"extra spaces were found in line '%s%s%s'\n",
 				&ln, UNDERLINE, CYAN, RESET, BOLD, line,
 					RESET, RED, (char *)*extra, RESET);
+	ft_strdel((char **)extra);
 	return (err_msg);
 }

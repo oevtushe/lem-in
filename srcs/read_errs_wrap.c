@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/07 18:15:57 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/08 16:41:18 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/09 10:39:56 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	further_handlers(t_err **err, t_pair *extra)
 {
+	ft_memdel((void **)err);
 	if (!extra->fst && !extra->scd)
 		*err = raise_data_no_start_end();
 	else if (!extra->fst)
@@ -37,6 +38,7 @@ void	li_handler(t_err *err, char **input, int size)
 
 void	do_cmd_inv(int cmd_mode, char **line, t_err **err)
 {
+	ft_memdel((void **)err);
 	if (cmd_mode)
 		*err = raise_cmd_bad_using(*line);
 	else

@@ -28,5 +28,6 @@ char	*hlr_link_extra_link_chrs(void **extra, int line)
 	err_msg = ft_format("%s%sError%s:%s%d%s: too much link characters '%s-%s'"
 			" in line '%s%s%s'\n", &ln, UNDERLINE, CYAN, RESET, BOLD,
 			line, RESET, BOLD, RESET, RED, *extra, RESET);
+	ft_strdel((char **)extra);
 	return (err_msg);
 }

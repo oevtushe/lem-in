@@ -33,5 +33,6 @@ char	*hlr_link_spaces(void **extra, int line)
 	err_msg = ft_format("%s%sError%s:%s%d%s: spaces are not allowed "
 			"'%s%s%s'\n", &ln, UNDERLINE, CYAN, RESET, BOLD, line,
 				RESET, RED, *extra, RESET);
+	ft_strdel((char **)extra);
 	return (err_msg);
 }

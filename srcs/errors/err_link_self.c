@@ -28,5 +28,6 @@ char	*hlr_link_self(void **extra, int line)
 	err_msg = ft_format("%s%sError%s:%s%d%s: selflink, "
 			"room '%s%s%s'\n", &ln, UNDERLINE, CYAN, RESET,
 			BOLD, line, RESET, RED, (char*)*extra, RESET);
+	ft_strdel((char **)extra);
 	return (err_msg);
 }

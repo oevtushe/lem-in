@@ -39,5 +39,8 @@ char	*hlr_room_extra_parms(void **extra, int line)
 			"'%s%s%s' in '%s%s%s' \n", &ln, UNDERLINE, CYAN, RESET, BOLD,
 			line, RESET, RED, (char *)p->scd, RESET,\
 			RED, (char *)p->fst, RESET);
+	ft_strdel((char **)&p->fst);
+	ft_strdel((char **)&p->scd);
+	ft_memdel(extra);
 	return (err_msg);
 }

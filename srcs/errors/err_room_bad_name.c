@@ -30,5 +30,6 @@ char	*hlr_room_bad_name(void **extra, int line)
 				&ln, UNDERLINE, CYAN, RESET, BOLD, line, RESET,\
 				RED, (char*)*extra, RESET,\
 				RED, ((char*)*extra)[0], RESET);
+	ft_strdel((char **)extra);
 	return (err_msg);
 }

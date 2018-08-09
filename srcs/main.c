@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 10:27:51 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/08 18:59:54 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/09 13:48:06 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,6 @@ int			main(int argc, char **argv)
 	if (err)
 		error_handler(err, po.e);
 	free_lmdata(&data);
+	system("leaks lem-in");
 	return (0);
 }

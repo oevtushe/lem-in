@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 10:58:48 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/08 18:39:55 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/09 09:29:37 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,6 @@ char	*hlr_cmnt_after_cmd(void **extra, int line)
 			" aren't allowed straight after %scmd%s definition"
 			" '%s%s%s'\n", &ln, UNDERLINE, CYAN, RESET, BOLD,
 			line, RESET, GREEN, RESET, GREEN, RESET, RED, *extra, RESET);
+	ft_strdel((char **)extra);
 	return (err_msg);
 }

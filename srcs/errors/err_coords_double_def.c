@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 18:52:11 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/08 18:40:09 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/09 09:31:44 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,10 @@ char		*hlr_coords_double_def(void **extra, int line)
 			(char*)p1->fst, RESET, RED,
 			(char*)p2->scd, RESET, BOLD,
 			*(int*)p2->fst, RESET);
+	ft_memdel((void **)&p2->fst);
+	ft_strdel((char **)&p2->scd);
+	ft_memdel((void **)&p1->scd);
+	ft_strdel((char **)&p1->fst);
+	ft_memdel(extra);
 	return (err_msg);
 }

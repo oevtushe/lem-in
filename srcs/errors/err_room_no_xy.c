@@ -29,5 +29,6 @@ char	*hlr_room_no_xy(void **extra, int line)
 			"not specified '%s%s%s'\n", &ln, UNDERLINE, CYAN, RESET, BOLD,
 			line, RESET, GREEN, RESET, GREEN, RESET, RED,\
 			(char *)*extra, RESET);
+	ft_strdel((char **)extra);
 	return (err_msg);
 }

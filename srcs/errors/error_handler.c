@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/14 12:26:52 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/08 16:22:56 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/09 10:14:52 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,5 @@ void				error_handler(t_err *err, int errors)
 	}
 	else if (!errors && err_msg)
 		ft_printf("ERROR\n");
-	exit(47);
+	ft_freepa_sd((void ***)&dsp, DSP_SIZE);
 }

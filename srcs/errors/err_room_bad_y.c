@@ -28,5 +28,6 @@ char	*hlr_room_bad_y(void **extra, int line)
 	err_msg = ft_format("%s%sError%s:%s%d%s: bad %sy%s coordinate '%s%s%s'\n",
 			&ln, UNDERLINE, CYAN, RESET, BOLD, line, RESET, GREEN, RESET,
 			RED, (char *)*extra, RESET);
+	ft_strdel((char **)extra);
 	return (err_msg);
 }

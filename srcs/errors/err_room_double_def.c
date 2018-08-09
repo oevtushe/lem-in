@@ -58,5 +58,10 @@ char	*hlr_room_double_def(void **extra, int line)
 			(char*)p1->fst, RESET, RED,
 			(char*)p2->scd, RESET, BOLD,
 			*(int*)p2->fst, RESET);
+	ft_memdel((void**)&p2->fst);
+	ft_strdel((char**)&p2->scd);
+	ft_memdel((void**)&p1->scd);
+	ft_strdel((char**)&p1->fst);
+	ft_memdel(extra);
 	return (err_msg);
 }

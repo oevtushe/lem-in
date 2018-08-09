@@ -34,5 +34,8 @@ char	*hlr_room_bad_coord(void **extra, int line)
 			"and '%s%s%s'\n", &ln, UNDERLINE, CYAN, RESET, BOLD, line,
 			RESET, RED, (char*)p->fst, RESET, RED,
 			(char*)p->scd, RESET);
+	ft_strdel((char **)&p->fst);
+	ft_strdel((char **)&p->scd);
+	ft_memdel(extra);
 	return (err_msg);
 }

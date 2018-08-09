@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 15:30:20 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/08 16:36:54 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/09 09:22:34 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,6 @@ static t_err	*check_err_room(char **arr, size_t len,
 		err = raise_room_bad_name(line);
 	else if (!ft_isvldint(arr[1]) || !ft_isvldint(arr[2]))
 		err = gen_bad_coord_err(arr[1], arr[2]);
-	else if (data->adj_cs >= data->adj_as)
-		realloc_adj(data);
 	else if (ft_arrgetidx((void**)data->adj, data->adj_cs,
 				arr[0], check_arr) != -1)
 		err = raise_room_double_def(arr[0]);
@@ -85,6 +83,8 @@ t_err			*parse_room(char *line, t_lmdata *data,
 	len = ft_parrlen_zt((void**)arr);
 	if (!(err = check_err_room(arr, len, line, data)))
 	{
+		if (data->adj_cs >= data->adj_as)
+			realloc_adj(data);
 		rd = new_node(arr[0], ft_atoi(arr[1]), ft_atoi(arr[2]));
 		data->adj[data->adj_cs++] = ft_lstnew(rd, sizeof(t_node));
 		if (cmd_mode == 1)

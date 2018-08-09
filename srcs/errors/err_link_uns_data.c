@@ -28,5 +28,6 @@ char	*hlr_link_uns_data(void **extra, int line)
 	err_msg = ft_format("%s%sError%s:%s%d%s: you must specify"
 			" 2 rooms '%s%s%s'\n", &ln, UNDERLINE, CYAN, RESET,
 			BOLD, line, RESET, RED, *extra, RESET);
+	ft_strdel((char **)extra);
 	return (err_msg);
 }
