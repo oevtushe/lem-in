@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 10:46:32 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/08 10:46:38 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/08/13 08:06:52 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_err	*read_ants(int *ants)
 	st = ERR_DATA_EMPTY;
 	err = NULL;
 	line = NULL;
-	if (get_next_line(0, &line))
+	if (get_next_line(0, &line) == 1)
 	{
 		if (ft_isvldint(line) && line[0] != '-')
 		{
