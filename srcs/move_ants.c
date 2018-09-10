@@ -6,7 +6,7 @@
 /*   By: oevtushe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 10:34:42 by oevtushe          #+#    #+#             */
-/*   Updated: 2018/08/08 10:42:30 by oevtushe         ###   ########.fr       */
+/*   Updated: 2018/09/10 17:31:23 by oevtushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,26 +37,26 @@ int			move_ants(t_lmdata *data, t_list *paths, int *al, int *aop)
 	int		i;
 	int		new;
 	t_list	*path;
-	int		sm;
-	int		spl;
+	t_point	sm_sum;
 
 	i = 0;
-	sm = 0;
-	spl = ft_lstlen(((t_path *)paths->content)->list);
+	ft_memset(&sm_sum, 0, sizeof(t_point));
 	while (paths)
 	{
 		new = 0;
 		path = ((t_path *)paths->content)->list;
-		if (*al < data->ants && (int)ft_lstlen(path) - spl <= data->ants - *al)
+		sm_sum.y += ft_lstlen(path);
+		if (*al < data->ants &&
+			(i + 1) * (int)ft_lstlen(path) - sm_sum.y <= (data->ants - *al))
 		{
 			++aop[i];
-			sm = 1;
+			sm_sum.x = 1;
 			new = ++*al;
 			path = path->next;
 		}
-		cycle_through_path(path, &new, &sm);
+		cycle_through_path(path, &new, &sm_sum.x);
 		paths = paths->next;
 		++i;
 	}
-	return (sm);
+	return (sm_sum.x);
 }
